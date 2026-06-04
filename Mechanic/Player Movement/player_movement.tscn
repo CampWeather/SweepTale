@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://voxod5rd5kf5"]
+
+[ext_resource type="Script" uid="uid://biw817rt61hgd" path="res://Mechanic/Player Movement/PlayerMove.gd" id="1_yjmjs"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nfyxn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ne5ia"]
+
+[node name="Player Movement" type="Node3D" unique_id=837243389]
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=451999879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8699288, 1.2072318, -2.3480592)
+script = ExtResource("1_yjmjs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2131490325]
+mesh = SubResource("CapsuleMesh_nfyxn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1781767640]
+shape = SubResource("CapsuleShape3D_ne5ia")
+
+[node name="Neck" type="Node3D" parent="Player" unique_id=232576509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5455291, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Neck" unique_id=683751059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2012763, 0)
