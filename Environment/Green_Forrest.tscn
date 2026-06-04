@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bk485wxfqm2ud"]
 
-[ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Environment/InteractionController.cs" id="1_p3up1"]
+[ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Mechanic/Interaction/InteractionController.cs" id="1_p3up1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gnynx"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
