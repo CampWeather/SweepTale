@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://ctdffkuigs1i4"]
+
+[ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Mechanic/Interaction/InteractionController.cs" id="1_ak4oj"]
+
+[node name="TestInteraction" type="Node3D" unique_id=195860454]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=487519323]
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=39630971]
+target_position = Vector3(0, -1, -3)
+script = ExtResource("1_ak4oj")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=771207664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+use_collision = true

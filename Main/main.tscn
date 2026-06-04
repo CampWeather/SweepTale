@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bkrkf40selx67"]
+
+[ext_resource type="PackedScene" uid="uid://bk485wxfqm2ud" path="res://Graphics/Environment/Green_Forrest.tscn" id="1_2w1kt"]
+[ext_resource type="PackedScene" uid="uid://voxod5rd5kf5" path="res://Mechanic/Player Movement/player_movement.tscn" id="2_qvhan"]
+[ext_resource type="PackedScene" uid="uid://ctdffkuigs1i4" path="res://Mechanic/Interaction/test_interaction.tscn" id="3_qvhan"]
+
+[node name="Node3D" type="Node3D" unique_id=1692333861]
+
+[node name="Environment" parent="." unique_id=1267444744 instance=ExtResource("1_2w1kt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74444926, 0, -1.3627052)
+
+[node name="Player Movement" parent="." unique_id=837243389 instance=ExtResource("2_qvhan")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77899265, 0.25000048, 7.359867)
+
+[node name="TestInteraction" parent="Player Movement" unique_id=195860454 instance=ExtResource("3_qvhan")]
