@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class InteractionController : RayCast3D
+public partial class pick_up_trash : RayCast3D
 {
 	public override void _Ready()
 	{
@@ -16,9 +16,11 @@ public partial class InteractionController : RayCast3D
 			{
 				Node3D objekTertabrak = (Node3D)GetCollider();
 
-				GD.Print("Memungut sampah: " + objekTertabrak.Name);
-
-				objekTertabrak.QueueFree();
+				if (objekTertabrak.IsInGroup("Sampah"))
+				{
+					GD.Print("Memungut sampah: " + objekTertabrak.Name);
+					objekTertabrak.QueueFree();
+				}
 			}
 			else
 			{
