@@ -25,6 +25,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5455291, 0)
 [node name="Camera3D" type="Camera3D" parent="Player/Neck" unique_id=683751059]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2012763, 0)
 
-[node name="RayCast3D" type="RayCast3D" parent="Player/Neck/Camera3D" unique_id=1898830635]
+[node name="RayCast3D" type="RayCast3D" parent="Player/Neck/Camera3D" unique_id=1898830635 node_paths=PackedStringArray("PosisiPegang")]
 target_position = Vector3(0, -1, -3)
 script = ExtResource("2_nfyxn")
+PosisiPegang = NodePath("../PosisiPegang")
+
+[node name="PosisiPegang" type="Node3D" parent="Player/Neck/Camera3D" unique_id=27201952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)

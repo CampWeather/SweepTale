@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://cvvsmaus52yl0"]
+
+[ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Mechanic/Interaction/pick_up_trash.cs" id="1_0dwx2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gnynx"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_p3up1"]
+sky_material = SubResource("ProceduralSkyMaterial_gnynx")
+
+[sub_resource type="Environment" id="Environment_c8xbk"]
+background_mode = 2
+sky = SubResource("Sky_p3up1")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Environment" type="Node3D" unique_id=1267444744]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1913049885]
+transform = Transform3D(-0.7248992, 0.06974484, 0.6853152, 0.5432546, 0.6695841, 0.50648934, -0.42355117, 0.73945445, -0.52327025, 0, 13.776673, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1819779327]
+environment = SubResource("Environment_c8xbk")
+
+[node name="Floor" type="CSGBox3D" parent="." unique_id=481898138]
+use_collision = true
+size = Vector3(50, 0.5, 50)
+
+[node name="Tree_Complex" type="CSGCombiner3D" parent="." unique_id=702849621]
+use_collision = true
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Tree_Complex" unique_id=302142193]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9950113, 3.2650788, -0.36386752)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Tree_Complex" unique_id=123211197]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8605504, 3.2650788, -3.1640854)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1842522277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.89871, 3.2650788, 4.246712)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Tree_Complex" unique_id=601414706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.932983, 3.2650788, -22.75912)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="Tree_Complex" unique_id=893972662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.157654, -0.1679213, -4.1637106)
+radius = 0.391
+height = 0.001
+
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1722369548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9914045, 3.2650788, 9.626256)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D7" type="CSGCylinder3D" parent="Tree_Complex" unique_id=68806282]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.824371, 3.2650788, 22.328987)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D8" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1577980184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5036678, 3.2650788, -8.953339)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D9" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1192221529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.331703, 3.2650769, 19.404697)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D10" type="CSGCylinder3D" parent="Tree_Complex" unique_id=304337236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.299387, 3.2650788, 2.3479662)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D11" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1256510897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9800406, 3.3376827, -17.618305)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D12" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1647560714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.472954, 3.2650769, 15.058613)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D13" type="CSGCylinder3D" parent="Tree_Complex" unique_id=2035249450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.25178, 3.2650788, 15.570759)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D14" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1716736240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.559189, 3.2650788, -16.09757)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D15" type="CSGCylinder3D" parent="Tree_Complex" unique_id=145461467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2254782, 3.2650788, 16.664734)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D16" type="CSGCylinder3D" parent="Tree_Complex" unique_id=1438292724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4905, 3.2650788, -10.902189)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D17" type="CSGCylinder3D" parent="Tree_Complex" unique_id=2033049320]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.38376, 3.2650788, -0.37264633)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D18" type="CSGCylinder3D" parent="Tree_Complex" unique_id=904711609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.392872, 3.2650788, -6.7628403)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D19" type="CSGCylinder3D" parent="Tree_Complex" unique_id=473863407]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.129301, 3.2650788, -18.130255)
+radius = 0.391
+height = 6.867
+
+[node name="CSGCylinder3D20" type="CSGCylinder3D" parent="Tree_Complex" unique_id=926810390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45761, 3.2650788, 19.67568)
+radius = 0.391
+height = 6.867
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=960200902]
+transform = Transform3D(1, 0, 0, 0, 0.8486487, 0.52895695, 0, -0.52895695, 0.8486487, 0.19261837, 17.599455, 31.344057)
+
+[node name="TestInteraction" type="Node3D" parent="." unique_id=1012675374]
+
+[node name="Camera3D" type="Camera3D" parent="TestInteraction" unique_id=1754286076]
+
+[node name="RayCast3D" type="RayCast3D" parent="TestInteraction" unique_id=1298740783]
+target_position = Vector3(0, -1, -3)
+script = ExtResource("1_0dwx2")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="TestInteraction" unique_id=390817449 groups=["Sampah"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+use_collision = true
