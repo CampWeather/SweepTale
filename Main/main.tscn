@@ -22,11 +22,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77899265, 0.25000048, 7.359
 
 [node name="TestInteraction" parent="Player Movement" unique_id=195860454 instance=ExtResource("3_qvhan")]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1095773462 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.470969, 0.7608677, 0)
-use_collision = true
-
-[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=207969703 groups=["Sampah"]]
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=207969703 groups=["Interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7435342, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=241394423]
@@ -48,6 +44,7 @@ shape = SubResource("BoxShape3D_k3v36")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.982287, 0.7435342, -7.5230002)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3" unique_id=1149394082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.004532, -0.066782594, 1.1138153)
 mesh = SubResource("BoxMesh_eunhr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3" unique_id=639605326]
@@ -75,6 +72,7 @@ shape = SubResource("BoxShape3D_k3v36")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.153543, 0.7435342, -12.271963)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D6" unique_id=1904143530]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.4719, -0.19713116, 7.21681)
 mesh = SubResource("BoxMesh_eunhr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D6" unique_id=176011060]
@@ -97,12 +95,3 @@ mesh = SubResource("BoxMesh_eunhr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D8" unique_id=1218958091]
 shape = SubResource("BoxShape3D_k3v36")
-
-[node name="PlaceholderTrash" type="RigidBody3D" parent="." unique_id=885953894 groups=["CarryableTrash"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8237262, 0.79342747, -2.674118)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaceholderTrash" unique_id=424261905]
-mesh = SubResource("CylinderMesh_qvhan")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlaceholderTrash" unique_id=1250675875]
-shape = SubResource("CapsuleShape3D_eunhr")
