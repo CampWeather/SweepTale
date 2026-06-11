@@ -101,7 +101,10 @@ public partial class pick_up_trash : RayCast3D
 			originalLayer = rb.CollisionLayer;
 			originalMask = rb.CollisionMask;
 
+			// BARIS PERBAIKAN: Ubah mode freeze ke Kinematic agar transform-nya bisa bergerak manual
+			rb.FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
 			rb.Freeze = true;
+			
 			rb.CollisionLayer = 0;
 			rb.CollisionMask = 0;
 		}
