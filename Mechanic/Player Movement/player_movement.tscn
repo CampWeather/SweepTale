@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://voxod5rd5kf5"]
 
 [ext_resource type="Script" uid="uid://biw817rt61hgd" path="res://Mechanic/Player Movement/PlayerMove.gd" id="1_yjmjs"]
-[ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Mechanic/Interaction/pick_up_trash.cs" id="2_nfyxn"]
+[ext_resource type="Script" uid="uid://b3n4td2ruurwi" path="res://Mechanic/Interaction/PlayerInteractor.cs" id="2_nfyxn"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nfyxn"]
 
@@ -25,8 +25,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5455291, 0)
 [node name="Camera3D" type="Camera3D" parent="Player/Neck" unique_id=683751059]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2012763, 0)
 
-[node name="RayCast3D" type="RayCast3D" parent="Player/Neck/Camera3D" unique_id=1898830635 node_paths=PackedStringArray("HandPosition")]
-target_position = Vector3(0, -1, -3)
+[node name="RayCast3D" type="RayCast3D" parent="Player/Neck/Camera3D" unique_id=1898830635]
+target_position = Vector3(0, 0, -3)
 script = ExtResource("2_nfyxn")
 HandPosition = NodePath("../HandPosition")
 
