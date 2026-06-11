@@ -136,3 +136,12 @@ surface_material_override/0 = SubResource("StandardMaterial3D_f3gf5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D8" unique_id=1218958091]
 shape = SubResource("BoxShape3D_k3v36")
+
+[node name="PlaceholderTrash" type="RigidBody3D" parent="." unique_id=885953894 groups=["CarryableTrash"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8237262, 0.79342747, -2.674118)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaceholderTrash" unique_id=424261905]
+mesh = SubResource("CylinderMesh_qvhan")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlaceholderTrash" unique_id=1250675875]
+shape = SubResource("CapsuleShape3D_eunhr")

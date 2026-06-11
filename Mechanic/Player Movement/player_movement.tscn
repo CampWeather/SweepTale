@@ -28,3 +28,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2012763, 0)
 [node name="RayCast3D" type="RayCast3D" parent="Player/Neck/Camera3D" unique_id=1898830635]
 target_position = Vector3(0, 0, -3)
 script = ExtResource("2_nfyxn")
+HandPosition = NodePath("../HandPosition")
+
+[node name="HandPosition" type="Marker3D" parent="Player/Neck/Camera3D" unique_id=1799714156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -1.5)
