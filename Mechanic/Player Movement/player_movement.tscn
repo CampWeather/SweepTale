@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://biw817rt61hgd" path="res://Mechanic/Player Movement/PlayerMove.gd" id="1_yjmjs"]
 [ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Mechanic/Interaction/pick_up_trash.cs" id="2_nfyxn"]
+[ext_resource type="Material" uid="uid://8oio4of1hcc5" path="res://Mechanic/Interaction/outline_material.tres" id="3_ne5ia"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nfyxn"]
 
@@ -29,6 +30,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2012763, 0)
 target_position = Vector3(0, -1, -3)
 script = ExtResource("2_nfyxn")
 HandPosition = NodePath("../HandPosition")
+OutlineMaterial = ExtResource("3_ne5ia")
 
 [node name="HandPosition" type="Marker3D" parent="Player/Neck/Camera3D" unique_id=1799714156]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -1.5)
