@@ -116,7 +116,7 @@ public partial class pick_up_trash : RayCast3D
 		if (IsColliding())
 		{
 			Node3D collider = (Node3D)GetCollider();
-			if (collider.IsInGroup("CarryableTrash"))
+			if (collider.IsInGroup("CarryableTrash") || collider.IsInGroup("Sampah"))
 			{
 				if (collider != targetedObject)
 				{
