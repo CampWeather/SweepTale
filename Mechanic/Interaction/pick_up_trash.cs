@@ -4,110 +4,146 @@ using System;
 public partial class pick_up_trash : RayCast3D
 {
 	[Export] public Node3D HandPosition;
-	[Export] public Material OutlineMaterial; // Tambahkan parameter untuk material outline
+	[Export] public Material OutlineMaterial;
+	[Export] public StringName CarryableGroup = "CarryableTrash";
+	[Export] public StringName PileGroup = "PileTrash";
+	[Export] public StringName TrashGroup = "Sampah";
+	[Export] public bool RemovePileAfterPickup = true;
+	[Export] public float PilePickupHoldTime = 1.2f;
 
 	private Node3D heldObject = null;
 	private uint originalLayer;
 	private uint originalMask;
 	private float eHoldTimer = 0.0f;
-	private float throwHoldThreshold = 0.3f;
-
+	private readonly float throwHoldThreshold = 0.3f;
 	private bool isTrackingHold = false;
 	private bool justPickedUp = false;
-
-	private Node3D targetedObject = null; // Tambahkan referensi ke objek yang ditargetkan
+	private Node3D targetedObject = null;
+	private bool isTrackingPilePickup = false;
+	private float pilePickupTimer = 0.0f;
+	private Node3D pendingPileTrash = null;
+	private ProgressBar pilePickupBar;
 
 	public override void _Ready()
 	{
 		Enabled = true;
+		CollideWithBodies = true;
+		CollideWithAreas = true;
+		
+		pilePickupBar = GetTree().GetFirstNodeInGroup("pile_pickup_bar") as ProgressBar;
+		
+		if (pilePickupBar == null)
+		{
+			GD.PrintErr("PilePickupBar tidak ditemukan. Pastikan node ProgressBar sudah dimasukkan ke group 'pile_pickup_bar'.");
+			return;
+		}
+		pilePickupBar.Visible = false;
+		pilePickupBar.MinValue = 0;
+		pilePickupBar.MaxValue = PilePickupHoldTime;
+		pilePickupBar.Value = 0;
 	}
 
-	public override void _Process(double delta)
+public override void _Process(double delta)
+{
+	if (heldObject != null && HandPosition != null)
 	{
-		if (heldObject != null && HandPosition != null)
+		heldObject.GlobalTransform = HandPosition.GlobalTransform;
+	}
+
+	CheckForTarget();
+
+	if (heldObject != null)
+	{
+		if (justPickedUp)
 		{
-			heldObject.GlobalTransform = HandPosition.GlobalTransform;
-		}
-
-		// Logika Penyorotan/Outline (Soroti objek SEBELUM interaksi)
-		CheckForTarget();
-
-		// Logika Pegangan (Holding)
-		if (heldObject != null)
-		{
-			if (justPickedUp)
-			{
-				if (Input.IsActionJustReleased("interact"))
-				{
-					justPickedUp = false;
-				}
-				return;
-			}
-
-			if (Input.IsActionJustPressed("interact"))
-			{
-				GD.Print("Tekan dan tahan untuk melempar.");
-				isTrackingHold = true;
-				eHoldTimer = 0.0f;
-			}
-
-			if (isTrackingHold && Input.IsActionPressed("interact"))
-			{
-				eHoldTimer += (float)delta;
-				if (eHoldTimer >= throwHoldThreshold)
-				{
-					ThrowObject();
-					isTrackingHold = false;
-					eHoldTimer = 0.0f;
-				}
-			}
-
 			if (Input.IsActionJustReleased("interact"))
 			{
-				if (isTrackingHold)
-				{
-					// EholdTimer < threshold, jangan melempar di sini.
-					isTrackingHold = false;
-					eHoldTimer = 0.0f;
-				}
+				justPickedUp = false;
 			}
+			return;
 		}
-	}
 
-	public override void _Input(InputEvent @event)
-	{
-		// Logika Interaksi (Ambil/Simpan)
-		if (@event.IsActionPressed("interact"))
+		if (Input.IsActionJustPressed("interact"))
 		{
-			if (heldObject == null)
+			GD.Print("Tekan dan tahan untuk melempar.");
+			isTrackingHold = true;
+			eHoldTimer = 0.0f;
+		}
+
+		if (isTrackingHold && Input.IsActionPressed("interact"))
+		{
+			eHoldTimer += (float)delta;
+			if (eHoldTimer >= throwHoldThreshold)
 			{
-				// Hanya izinkan pengambilan jika tidak memegang apa pun
-				if (IsColliding())
-				{
-					Node3D collider = (Node3D)GetCollider();
-					if (collider.IsInGroup("CarryableTrash"))
-					{
-						PickUpObject(collider);
-					}
-				}
+				ThrowObject();
+				isTrackingHold = false;
+				eHoldTimer = 0.0f;
 			}
 		}
-		else if (@event.IsActionPressed("store_item"))
+
+		if (Input.IsActionJustReleased("interact"))
 		{
-			if (heldObject != null)
+			if (isTrackingHold)
 			{
 				isTrackingHold = false;
-				StoreToInventory();
+				eHoldTimer = 0.0f;
+			}
+		}
+
+		return;
+	}
+
+	UpdatePilePickup((float)delta);
+}
+
+public override void _Input(InputEvent @event)
+{
+	if (@event.IsActionPressed("interact"))
+	{
+		if (heldObject == null)
+		{
+			ForceRaycastUpdate();
+
+			if (IsColliding())
+			{
+				Node colliderNode = GetCollider() as Node;
+				Node3D target = FindTargetableNode(colliderNode);
+
+				if (target == null)
+					return;
+
+				if (target.IsInGroup("CarryableTrash"))
+				{
+					PickUpObject(target);
+				}
+				else if (target.IsInGroup("PileTrash"))
+				{
+					StartPilePickup(target);
+				}
 			}
 		}
 	}
+	else if (@event.IsActionReleased("interact"))
+	{
+		if (heldObject == null)
+		{
+			CancelPilePickup();
+		}
+	}
+	else if (@event.IsActionPressed("store_item"))
+	{
+		if (heldObject != null)
+		{
+			isTrackingHold = false;
+			StoreToInventory();
+		}
+	}
+}
 
-	// Baru: Periksa objek yang ditargetkan dan aktifkan outline
 	private void CheckForTarget()
 	{
 		if (heldObject != null)
 		{
-			// Jika memegang objek, jangan soroti yang lain
 			SetOutline(targetedObject, false);
 			targetedObject = null;
 			return;
@@ -115,53 +151,66 @@ public partial class pick_up_trash : RayCast3D
 
 		if (IsColliding())
 		{
-			Node3D collider = (Node3D)GetCollider();
-			if (collider.IsInGroup("CarryableTrash") || collider.IsInGroup("Sampah"))
+			Node colliderNode = GetCollider() as Node;
+			Node3D target = FindTargetableNode(colliderNode);
+
+			if (target != null)
 			{
-				if (collider != targetedObject)
+				if (target != targetedObject)
 				{
-					// Nonaktifkan outline pada objek target lama
 					SetOutline(targetedObject, false);
-					
-					// Soroti objek target baru
-					targetedObject = collider;
+					targetedObject = target;
 					SetOutline(targetedObject, true);
 				}
 			}
 			else
 			{
-				// Tabrakan dengan objek non-sampah, matikan outline target lama
 				SetOutline(targetedObject, false);
 				targetedObject = null;
 			}
 		}
 		else
 		{
-			// Tidak ada tabrakan, matikan outline target lama
 			SetOutline(targetedObject, false);
 			targetedObject = null;
 		}
 	}
 
-	// Baru: Fungsi untuk mengaktifkan/menonaktifkan outline pada MeshInstance3D
+	private Node3D FindTargetableNode(Node node)
+	{
+		while (node != null)
+		{
+			if (node.IsInGroup(CarryableGroup) || node.IsInGroup(PileGroup) || node.IsInGroup(TrashGroup))
+			{
+				return node as Node3D;
+			}
+			node = node.GetParent();
+		}
+		return null;
+	}
+
 	private void SetOutline(Node3D obj, bool enabled)
 	{
-		if (obj == null) return;
+		if (obj == null)
+			return;
 
-		// Cari MeshInstance3D di bawah objek
-		MeshInstance3D meshInstance = obj.GetNodeOrNull<MeshInstance3D>("MeshInstance3D");
-		if (meshInstance != null)
+		if (obj is MeshInstance3D selfMesh)
 		{
-			if (enabled)
+			selfMesh.MaterialOverlay = enabled ? OutlineMaterial : null;
+		}
+
+		SetOutlineRecursive(obj, enabled);
+	}
+
+	private void SetOutlineRecursive(Node node, bool enabled)
+	{
+		foreach (Node child in node.GetChildren())
+		{
+			if (child is MeshInstance3D meshInstance)
 			{
-				// Terapkan outline sebagai material overrider
-				meshInstance.MaterialOverlay = OutlineMaterial;
+				meshInstance.MaterialOverlay = enabled ? OutlineMaterial : null;
 			}
-			else
-			{
-				// Hapus material overrider untuk menonaktifkan outline
-				meshInstance.MaterialOverlay = null;
-			}
+			SetOutlineRecursive(child, enabled);
 		}
 	}
 
@@ -169,18 +218,14 @@ public partial class pick_up_trash : RayCast3D
 	{
 		GD.Print("Memegang objek: " + obj.Name);
 		heldObject = obj;
-
-		// Baru: Nonaktifkan outline pada objek yang dipegang segera
 		SetOutline(heldObject, false);
 
 		if (heldObject is RigidBody3D rb)
 		{
 			originalLayer = rb.CollisionLayer;
 			originalMask = rb.CollisionMask;
-
 			rb.FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
 			rb.Freeze = true;
-
 			rb.CollisionLayer = 0;
 			rb.CollisionMask = 0;
 		}
@@ -188,6 +233,20 @@ public partial class pick_up_trash : RayCast3D
 		justPickedUp = true;
 		isTrackingHold = false;
 		eHoldTimer = 0.0f;
+	}
+
+	private void PickPileTrash(Node3D obj)
+	{
+		GD.Print("Memungut PileTrash: " + obj.Name);
+		SetOutline(obj, false);
+		if (targetedObject == obj)
+			{
+				targetedObject = null;
+			}
+		// Tambahkan ke inventory di sini kalau perlu
+		// Example:
+		// InventoryManager.Instance.Add("PileTrash");
+		obj.QueueFree();
 	}
 
 	private void ThrowObject()
@@ -202,7 +261,6 @@ public partial class pick_up_trash : RayCast3D
 
 			Vector3 throwDirection = -GlobalTransform.Basis.Z;
 			float throwForce = 15.0f;
-
 			rb.ApplyImpulse(throwDirection * throwForce);
 		}
 
@@ -215,4 +273,96 @@ public partial class pick_up_trash : RayCast3D
 		heldObject.QueueFree();
 		heldObject = null;
 	}
+	
+	private void StartPilePickup(Node3D obj)
+	{
+		if (pilePickupBar == null) return;
+		
+		if (obj == null)
+		return;
+
+		if (!obj.IsInGroup("PileTrash"))
+		return;
+
+		if (pendingPileTrash == obj && isTrackingPilePickup)
+		return;
+
+		pendingPileTrash = obj;
+		isTrackingPilePickup = true;
+		pilePickupTimer = 0.0f;
+
+		UpdatePilePickupUI(0.0f);
+		pilePickupBar.Visible = true;
+		pilePickupBar.Value = pilePickupTimer;
+	}
+
+	private void UpdatePilePickup(float delta)
+	{
+		if (!isTrackingPilePickup)
+		return;
+
+		if (pendingPileTrash == null)
+		{
+			CancelPilePickup();
+			return;
+		}
+
+		if (!Input.IsActionPressed("interact"))
+		{
+			CancelPilePickup();
+			return;
+		}
+
+		ForceRaycastUpdate();
+
+		Node3D currentTarget = null;
+
+		if (IsColliding())
+		{
+			Node colliderNode = GetCollider() as Node;
+			currentTarget = FindTargetableNode(colliderNode);
+		}
+
+		if (currentTarget != pendingPileTrash)
+		{
+			CancelPilePickup();
+			return;
+		}
+
+		pilePickupTimer += delta;
+
+		float progress = Mathf.Clamp(pilePickupTimer / PilePickupHoldTime, 0.0f, 1.0f);
+		UpdatePilePickupUI(progress);
+
+		if (pilePickupTimer >= PilePickupHoldTime)
+		{
+			Node3D pickedTarget = pendingPileTrash;
+			CancelPilePickup();
+			PickPileTrash(pickedTarget);
+		}
+	}
+	
+	private void CancelPilePickup()
+	{
+		isTrackingPilePickup = false;
+		pilePickupTimer = 0.0f;
+		pendingPileTrash = null;
+		UpdatePilePickupUI(0.0f, false);
+	}
+	
+	private void UpdatePilePickupUI(float progress, bool visible = true)
+	{
+		if (pilePickupBar == null)
+		return;
+
+		pilePickupBar.Visible = visible;
+		pilePickupBar.Value = pilePickupTimer;
+	}
+	
+	 private void ResetPilePickupUI()
+	{
+		if (pilePickupBar == null) return;
+		pilePickupBar.Visible = false;
+		pilePickupBar.Value = 0;
+		}
 }

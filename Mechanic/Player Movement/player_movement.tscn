@@ -3,15 +3,25 @@
 [ext_resource type="Script" uid="uid://biw817rt61hgd" path="res://Mechanic/Player Movement/PlayerMove.gd" id="1_yjmjs"]
 [ext_resource type="Script" uid="uid://j357l5xcue6s" path="res://Mechanic/Interaction/pick_up_trash.cs" id="2_nfyxn"]
 [ext_resource type="Material" uid="uid://8oio4of1hcc5" path="res://Mechanic/Interaction/outline_material.tres" id="3_ne5ia"]
+[ext_resource type="Shader" uid="uid://bfrrsl2ebegid" path="res://Mechanic/Player Movement/DustHitEffect.gdshader" id="4_h4mv5"]
+[ext_resource type="Script" uid="uid://ci1o8ujy6ywac" path="res://Mechanic/Player Movement/dust_hit_effect.gd" id="4_hwlxa"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nfyxn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ne5ia"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hwlxa"]
+shader = ExtResource("4_h4mv5")
+shader_parameter/blur_strength = 0.0
+shader_parameter/gray_strength = 0.0
+shader_parameter/dust_tint_strength = 0.0
+
 [node name="Player Movement" type="Node3D" unique_id=837243389]
 
-[node name="Player" type="CharacterBody3D" parent="." unique_id=451999879]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8699288, 1.2072318, -2.3480592)
+[node name="Player" type="CharacterBody3D" parent="." unique_id=451999879 groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14571834, 1.2072318, 0.13481975)
+collision_layer = 4294967295
+collision_mask = 4294967295
 script = ExtResource("1_yjmjs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=2131490325]
@@ -34,3 +44,32 @@ OutlineMaterial = ExtResource("3_ne5ia")
 
 [node name="HandPosition" type="Marker3D" parent="Player/Neck/Camera3D" unique_id=1799714156]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -1.5)
+
+[node name="DustHitEffect" type="CanvasLayer" parent="Player/Neck" unique_id=571704609]
+script = ExtResource("4_hwlxa")
+
+[node name="ColorRect" type="ColorRect" parent="Player/Neck/DustHitEffect" unique_id=396857961]
+material = SubResource("ShaderMaterial_hwlxa")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PickupUI" type="CanvasLayer" parent="Player/Neck" unique_id=1372210650]
+
+[node name="PilePickupBar" type="ProgressBar" parent="Player/Neck/PickupUI" unique_id=1192071515 groups=["pile_pickup_bar"]]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -13.5
+offset_right = 2.0
+offset_bottom = 13.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+rounded = true

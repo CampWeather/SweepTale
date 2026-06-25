@@ -3,10 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bk485wxfqm2ud" path="res://Graphics/Environment/Green_Forrest.tscn" id="1_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://voxod5rd5kf5" path="res://Mechanic/Player Movement/player_movement.tscn" id="2_qvhan"]
 [ext_resource type="PackedScene" uid="uid://ctdffkuigs1i4" path="res://Mechanic/Interaction/test_interaction.tscn" id="3_qvhan"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_eunhr"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_k3v36"]
+[ext_resource type="PackedScene" uid="uid://bdtrirl4cajdi" path="res://Graphics/Property/PileTrash.tscn" id="4_eunhr"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_qvhan"]
 
@@ -17,86 +14,10 @@
 [node name="Environment" parent="." unique_id=1267444744 instance=ExtResource("1_2w1kt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7828156, 0, -1.3380299)
 
-[node name="Player Movement" parent="." unique_id=837243389 instance=ExtResource("2_qvhan")]
+[node name="Player Movement" parent="." unique_id=837243389 groups=["player"] instance=ExtResource("2_qvhan")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77899265, 0.25000048, 7.359867)
 
 [node name="TestInteraction" parent="Player Movement" unique_id=195860454 instance=ExtResource("3_qvhan")]
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1095773462 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.470969, 0.7608677, 0)
-use_collision = true
-
-[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=207969703 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7435342, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=241394423]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1963560902]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D2" type="RigidBody3D" parent="." unique_id=675794852 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.768013, 0.7435342, 0.63986)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2" unique_id=1297691001]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2" unique_id=1092327052]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D3" type="RigidBody3D" parent="." unique_id=1576648089 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.982287, 0.7435342, -7.5230002)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3" unique_id=1149394082]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3" unique_id=639605326]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D4" type="RigidBody3D" parent="." unique_id=1678986865 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.41536, 0.7435342, 1.181995)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D4" unique_id=520203656]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D4" unique_id=960440388]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D5" type="RigidBody3D" parent="." unique_id=245820427 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1571321, 0.7435342, -12.440618)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D5" unique_id=2007650791]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D5" unique_id=93853428]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D6" type="RigidBody3D" parent="." unique_id=399213434 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.153543, 0.7435342, -12.271963)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D6" unique_id=1904143530]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D6" unique_id=176011060]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D7" type="RigidBody3D" parent="." unique_id=208823357 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7535343, 0.7435342, 16.641764)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D7" unique_id=103829524]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D7" unique_id=1424454303]
-shape = SubResource("BoxShape3D_k3v36")
-
-[node name="RigidBody3D8" type="RigidBody3D" parent="." unique_id=1155738088 groups=["Sampah"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.542437, 0.7435342, 19.106855)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D8" unique_id=2097434726]
-mesh = SubResource("BoxMesh_eunhr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D8" unique_id=1218958091]
-shape = SubResource("BoxShape3D_k3v36")
 
 [node name="PlaceholderTrash" type="RigidBody3D" parent="." unique_id=885953894 groups=["CarryableTrash"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8237262, 0.79342747, -2.674118)
@@ -106,3 +27,33 @@ mesh = SubResource("CylinderMesh_qvhan")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlaceholderTrash" unique_id=1250675875]
 shape = SubResource("CapsuleShape3D_eunhr")
+
+[node name="PileTrash" parent="." unique_id=777995863 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.84354615, -0.05190885, 1.3944886)
+
+[node name="PileTrash2" parent="." unique_id=228010494 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.289999, -0.05190885, -2.460559)
+
+[node name="PileTrash3" parent="." unique_id=618921955 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.789433, -0.05190885, 7.534009)
+
+[node name="PileTrash4" parent="." unique_id=718456171 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.838657, -0.05190885, -2.6985252)
+
+[node name="PileTrash5" parent="." unique_id=492606408 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.715624, -0.05190885, 3.82174)
+
+[node name="PileTrash6" parent="." unique_id=992094621 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.49953, -0.05190885, -6.4583864)
+
+[node name="PileTrash7" parent="." unique_id=122637056 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.272533, -0.051908374, -18.562967)
+
+[node name="PileTrash8" parent="." unique_id=998436646 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.435685, -0.05190885, -18.207481)
+
+[node name="PileTrash9" parent="." unique_id=114921914 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.923615, -0.051909804, 19.611004)
+
+[node name="PileTrash10" parent="." unique_id=2038212856 groups=["PileTrash"] instance=ExtResource("4_eunhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.815536, -0.05190885, 15.509914)

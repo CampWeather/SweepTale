@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 project/assembly_name="Sweepsong"
 
+[global_group]
+
+player=""
+
 [input]
 
 ui_accept={

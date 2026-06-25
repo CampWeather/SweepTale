@@ -18,6 +18,7 @@ extends CharacterBody3D
 
 @onready var neck: Node3D = get_node(neck_path)
 @onready var camera: Camera3D = get_node(camera_path)
+@onready var dust_hit_effect = $Neck/DustHitEffect
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var pitch: float = 0.0
@@ -65,3 +66,7 @@ func handle_movement(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, acceleration * delta)
 		velocity.z = move_toward(velocity.z, 0.0, acceleration * delta)
+
+func play_dust_hit_effect() -> void:
+	if dust_hit_effect and dust_hit_effect.has_method("play_dust_hit_effect"):
+		dust_hit_effect.play_dust_hit_effect()
