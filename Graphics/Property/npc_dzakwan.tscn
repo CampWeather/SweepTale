@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://bpn0qqq2hohkr"]
+
+[ext_resource type="PackedScene" uid="uid://nwqv1vcx0gel" path="res://Mechanic/Interaction/actionable.tscn" id="1_r2mgj"]
+[ext_resource type="Resource" uid="uid://egoj1sj3yk1o" path="res://Dialog/dialog_baru.dialogue" id="2_85lxn"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dl2ca"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dl2ca"]
+
+[node name="NPC_Dzakwan" type="StaticBody3D" unique_id=1383002684]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=294516454]
+mesh = SubResource("CapsuleMesh_dl2ca")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=449182070]
+shape = SubResource("CapsuleShape3D_dl2ca")
+
+[node name="Actionable" parent="." unique_id=1509722209 node_paths=PackedStringArray("quest_marker", "bubble_dialog") instance=ExtResource("1_r2mgj")]
+dialogue_resource = ExtResource("2_85lxn")
+quest_marker = NodePath("../QuestMarker")
+bubble_dialog = NodePath("../BubbleDialog")
+
+[node name="CollisionShape3D" parent="Actionable" index="0" unique_id=2056199435]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0.10005152, -0.44214714)
+
+[node name="QuestMarker" type="Label3D" parent="." unique_id=435711331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2872188, 0)
+billboard = 1
+text = "!"
+font_size = 50
+
+[node name="BubbleDialog" type="Label3D" parent="." unique_id=2013062698]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5303357, 0)
+visible = false
+billboard = 1
+text = "Haloo"
+
+[editable path="Actionable"]

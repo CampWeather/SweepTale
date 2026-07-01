@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://egoj1sj3yk1o"
+path="res://.godot/imported/dialog_baru.dialogue-5f19ea0839e1e67bae8701fa393a4da6.tres"
+
+[deps]
+
+source_file="res://Dialog/dialog_baru.dialogue"
+dest_files=["res://.godot/imported/dialog_baru.dialogue-5f19ea0839e1e67bae8701fa393a4da6.tres"]
+
+[params]
+
+defaults=true
