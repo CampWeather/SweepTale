@@ -11,6 +11,8 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ne5ia"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_dl2ca"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hwlxa"]
 shader = ExtResource("4_h4mv5")
 shader_parameter/blur_strength = 0.0
@@ -50,6 +52,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -1.5)
 
 [node name="Control" parent="Player/Neck/Camera3D/UI" unique_id=1075468232 instance=ExtResource("4_t4wkg")]
 mouse_filter = 2
+[node name="ActionableFinder" type="Area3D" parent="Player/Neck/Camera3D" unique_id=1077722868]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Neck/Camera3D/ActionableFinder" unique_id=1257633363]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6044626)
+shape = SubResource("SphereShape3D_dl2ca")
 
 [node name="DustHitEffect" type="CanvasLayer" parent="Player/Neck" unique_id=571704609]
 script = ExtResource("4_hwlxa")
