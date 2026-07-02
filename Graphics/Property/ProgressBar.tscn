@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://chhsh34nguch1"]
+
+[ext_resource type="Texture2D" uid="uid://dtcyma04es7o6" path="res://Graphics/Property/ProgressBar/bar_shadow_round_small.svg" id="1_3pj3i"]
+[ext_resource type="Texture2D" uid="uid://d0t7eoo3pwd4b" path="res://Graphics/Property/ProgressBar/bar_outline.svg" id="2_20yuv"]
+[ext_resource type="Texture2D" uid="uid://dmep1b8ucm4an" path="res://Graphics/Property/ProgressBar/bar_progress.svg" id="2_wtata"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=2145582346]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=1900181813 groups=["total_progress_bar"]]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -413.5
+offset_top = 37.0
+offset_right = 413.5
+offset_bottom = 55.0
+grow_horizontal = 2
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 12
+stretch_margin_right = 12
+texture_under = ExtResource("1_3pj3i")
+texture_over = ExtResource("2_20yuv")
+texture_progress = ExtResource("2_wtata")

@@ -23,6 +23,9 @@ public partial class pick_up_trash : RayCast3D
 	private float pilePickupTimer = 0.0f;
 	private Node3D pendingPileTrash = null;
 	private ProgressBar pilePickupBar;
+	private TextureProgressBar totalProgressBar;
+	private int totalTrashCount = 0;
+	private int collectedTrashCount = 0;
 
 	public override void _Ready()
 	{
@@ -41,104 +44,120 @@ public partial class pick_up_trash : RayCast3D
 		pilePickupBar.MinValue = 0;
 		pilePickupBar.MaxValue = PilePickupHoldTime;
 		pilePickupBar.Value = 0;
-	}
+		
+		totalProgressBar = GetTree().GetFirstNodeInGroup("total_progress_bar") as TextureProgressBar;
+		
+		// --- PERUBAHAN DI SINI: Hanya menghitung node yang ada di grup PileTrash ---
+		totalTrashCount = GetTree().GetNodesInGroup(PileGroup).Count;
 
-public override void _Process(double delta)
-{
-	if (heldObject != null && HandPosition != null)
-	{
-		heldObject.GlobalTransform = HandPosition.GlobalTransform;
-	}
-
-	CheckForTarget();
-
-	if (heldObject != null)
-	{
-		if (justPickedUp)
+		if (totalProgressBar != null)
 		{
+			totalProgressBar.MinValue = 0;
+			totalProgressBar.MaxValue = totalTrashCount;
+			totalProgressBar.Value = 0; 
+		}
+		else
+		{
+			GD.PrintErr("totalProgressBar tidak ditemukan! Pastikan sudah masuk Group 'total_progress_bar'.");
+		}
+	}
+
+	public override void _Process(double delta)
+	{
+		if (heldObject != null && HandPosition != null)
+		{
+			heldObject.GlobalTransform = HandPosition.GlobalTransform;
+		}
+
+		CheckForTarget();
+
+		if (heldObject != null)
+		{
+			if (justPickedUp)
+			{
+				if (Input.IsActionJustReleased("interact"))
+				{
+					justPickedUp = false;
+				}
+				return;
+			}
+
+			if (Input.IsActionJustPressed("interact"))
+			{
+				GD.Print("Tekan dan tahan untuk melempar.");
+				isTrackingHold = true;
+				eHoldTimer = 0.0f;
+			}
+
+			if (isTrackingHold && Input.IsActionPressed("interact"))
+			{
+				eHoldTimer += (float)delta;
+				if (eHoldTimer >= throwHoldThreshold)
+				{
+					ThrowObject();
+					isTrackingHold = false;
+					eHoldTimer = 0.0f;
+				}
+			}
+
 			if (Input.IsActionJustReleased("interact"))
 			{
-				justPickedUp = false;
+				if (isTrackingHold)
+				{
+					isTrackingHold = false;
+					eHoldTimer = 0.0f;
+				}
 			}
+
 			return;
 		}
 
-		if (Input.IsActionJustPressed("interact"))
-		{
-			GD.Print("Tekan dan tahan untuk melempar.");
-			isTrackingHold = true;
-			eHoldTimer = 0.0f;
-		}
-
-		if (isTrackingHold && Input.IsActionPressed("interact"))
-		{
-			eHoldTimer += (float)delta;
-			if (eHoldTimer >= throwHoldThreshold)
-			{
-				ThrowObject();
-				isTrackingHold = false;
-				eHoldTimer = 0.0f;
-			}
-		}
-
-		if (Input.IsActionJustReleased("interact"))
-		{
-			if (isTrackingHold)
-			{
-				isTrackingHold = false;
-				eHoldTimer = 0.0f;
-			}
-		}
-
-		return;
+		UpdatePilePickup((float)delta);
 	}
 
-	UpdatePilePickup((float)delta);
-}
-
-public override void _Input(InputEvent @event)
-{
-	if (@event.IsActionPressed("interact"))
+	public override void _Input(InputEvent @event)
 	{
-		if (heldObject == null)
+		if (@event.IsActionPressed("interact"))
 		{
-			ForceRaycastUpdate();
-
-			if (IsColliding())
+			if (heldObject == null)
 			{
-				Node colliderNode = GetCollider() as Node;
-				Node3D target = FindTargetableNode(colliderNode);
+				ForceRaycastUpdate();
 
-				if (target == null)
-					return;
+				if (IsColliding())
+				{
+					Node colliderNode = GetCollider() as Node;
+					Node3D target = FindTargetableNode(colliderNode);
 
-				if (target.IsInGroup("CarryableTrash"))
-				{
-					PickUpObject(target);
-				}
-				else if (target.IsInGroup("PileTrash"))
-				{
-					StartPilePickup(target);
+					if (target == null)
+						return;
+
+					if (target.IsInGroup("CarryableTrash"))
+					{
+						PickUpObject(target);
+					}
+					else if (target.IsInGroup("PileTrash"))
+					{
+						StartPilePickup(target);
+					}
 				}
 			}
 		}
-	}
-	else if (@event.IsActionReleased("interact"))
-	{
-		if (heldObject == null)
+		else if (@event.IsActionReleased("interact"))
 		{
-			CancelPilePickup();
+			if (heldObject == null)
+			{
+				CancelPilePickup();
+			}
+		}
+		else if (@event.IsActionPressed("store_item"))
+		{
+			if (heldObject != null)
+			{
+				isTrackingHold = false;
+				StoreToInventory();
+			}
 		}
 	}
-	else if (@event.IsActionPressed("store_item"))
-	{
-		if (heldObject != null)
-		{
-			isTrackingHold = false;
-			StoreToInventory();
-		}
-	}
-}
 
 	private void CheckForTarget()
 	{
@@ -235,20 +254,6 @@ public override void _Input(InputEvent @event)
 		eHoldTimer = 0.0f;
 	}
 
-	private void PickPileTrash(Node3D obj)
-	{
-		GD.Print("Memungut PileTrash: " + obj.Name);
-		SetOutline(obj, false);
-		if (targetedObject == obj)
-			{
-				targetedObject = null;
-			}
-		// Tambahkan ke inventory di sini kalau perlu
-		// Example:
-		// InventoryManager.Instance.Add("PileTrash");
-		obj.QueueFree();
-	}
-
 	private void ThrowObject()
 	{
 		GD.Print("Melempar objek (Hold E): " + heldObject.Name);
@@ -267,25 +272,15 @@ public override void _Input(InputEvent @event)
 		heldObject = null;
 	}
 
-	private void StoreToInventory()
-	{
-		GD.Print("Sukses menyimpan " + heldObject.Name + " ke inventory.");
-		heldObject.QueueFree();
-		heldObject = null;
-	}
-	
 	private void StartPilePickup(Node3D obj)
 	{
 		if (pilePickupBar == null) return;
 		
-		if (obj == null)
-		return;
+		if (obj == null) return;
 
-		if (!obj.IsInGroup("PileTrash"))
-		return;
+		if (!obj.IsInGroup("PileTrash")) return;
 
-		if (pendingPileTrash == obj && isTrackingPilePickup)
-		return;
+		if (pendingPileTrash == obj && isTrackingPilePickup) return;
 
 		pendingPileTrash = obj;
 		isTrackingPilePickup = true;
@@ -298,8 +293,7 @@ public override void _Input(InputEvent @event)
 
 	private void UpdatePilePickup(float delta)
 	{
-		if (!isTrackingPilePickup)
-		return;
+		if (!isTrackingPilePickup) return;
 
 		if (pendingPileTrash == null)
 		{
@@ -352,17 +346,64 @@ public override void _Input(InputEvent @event)
 	
 	private void UpdatePilePickupUI(float progress, bool visible = true)
 	{
-		if (pilePickupBar == null)
-		return;
+		if (pilePickupBar == null) return;
 
 		pilePickupBar.Visible = visible;
 		pilePickupBar.Value = pilePickupTimer;
 	}
 	
-	 private void ResetPilePickupUI()
+	private void ResetPilePickupUI()
 	{
 		if (pilePickupBar == null) return;
 		pilePickupBar.Visible = false;
 		pilePickupBar.Value = 0;
+	}
+		
+	// --- PERUBAHAN DI SINI: Validasi grup PileTrash ---
+
+	private void AddTrashProgress(Node3D obj)
+	{
+		// JIKA objek yang dipungut/disimpan TIDAK memiliki grup PileTrash, hentikan (jangan tambah progress)
+		if (obj == null || !obj.IsInGroup(PileGroup)) 
+			return;
+
+		collectedTrashCount++;
+		if (totalProgressBar != null)
+		{
+			totalProgressBar.Value = collectedTrashCount;
 		}
+
+		if (collectedTrashCount >= totalTrashCount)
+		{
+			GD.Print("Hore! Semua tumpukan sampah (PileTrash) sudah dibersihkan!");
+		}
+	}
+
+	private void PickPileTrash(Node3D obj)
+	{
+		GD.Print("Memungut PileTrash: " + obj.Name);
+		SetOutline(obj, false);
+		if (targetedObject == obj)
+		{
+			targetedObject = null;
+		}
+		
+		// Kirim data object ke fungsi progress
+		AddTrashProgress(obj); 
+		obj.QueueFree();
+	}
+
+	private void StoreToInventory()
+	{
+		if (heldObject != null)
+		{
+			GD.Print("Sukses menyimpan " + heldObject.Name + " ke inventory.");
+			
+			// Kirim data object ke fungsi progress (jika heldObject bukan PileTrash, fungsi ini akan otomatis mengabaikannya)
+			AddTrashProgress(heldObject);
+
+			heldObject.QueueFree();
+			heldObject = null;
+		}
+	}
 }
