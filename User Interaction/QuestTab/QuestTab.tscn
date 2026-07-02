@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://cbbkba1ygp6sl"]
+
+[ext_resource type="Script" uid="uid://b0418sfj205k5" path="res://User Interaction/QuestTab/QuestTab.gd" id="1_gky4r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4kxuq"]
+font_size = 20
+outline_size = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_mti6b"]
+font_size = 20
+outline_size = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gky4r"]
+bg_color = Color(0.8515625, 0.14558166, 0.6541001, 0.627451)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_62yky"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wxepc"]
+bg_color = Color(0.8, 0.81960785, 0.25490198, 0.627451)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="Control" type="Control" unique_id=1075468232]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gky4r")
+click_feedback_overshoot_scale = 1.2
+
+[node name="Panels" type="Control" parent="." unique_id=1271115540]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -324.0
+offset_right = 40.0
+offset_bottom = -284.0
+
+[node name="Quest Panel" type="PanelContainer" parent="Panels" unique_id=1770774145]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 106.0
+offset_top = 112.0
+offset_right = 287.0
+offset_bottom = 523.0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panels/Quest Panel" unique_id=1323994405]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panels/Quest Panel/MarginContainer" unique_id=1145496178]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panels/Quest Panel/MarginContainer/VBoxContainer" unique_id=1678821885]
+layout_mode = 2
+text = "Quest"
+label_settings = SubResource("LabelSettings_4kxuq")
+horizontal_alignment = 1
+
+[node name="Friend List Panel" type="PanelContainer" parent="Panels" unique_id=1751462396]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 106.0
+offset_top = 112.0
+offset_right = 287.0
+offset_bottom = 523.0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panels/Friend List Panel" unique_id=1957759431]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panels/Friend List Panel/MarginContainer" unique_id=2113317307]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panels/Friend List Panel/MarginContainer/VBoxContainer" unique_id=1063091908]
+layout_mode = 2
+text = "Friend List"
+label_settings = SubResource("LabelSettings_mti6b")
+horizontal_alignment = 1
+
+[node name="SideButtonArea" type="Control" parent="." unique_id=239315563]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -324.0
+offset_right = 40.0
+offset_bottom = -284.0
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Up" type="Button" parent="SideButtonArea" unique_id=613716139]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 44.0
+offset_top = 277.0
+offset_right = 52.0
+offset_bottom = 285.0
+grow_vertical = 2
+
+[node name="SelectionWindow" type="Control" parent="SideButtonArea" unique_id=487666889]
+anchors_preset = 0
+offset_left = 38.0
+offset_top = 321.0
+offset_right = 58.0
+offset_bottom = 341.0
+
+[node name="ButtonList" type="Control" parent="SideButtonArea/SelectionWindow" unique_id=605732441]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Quest" type="Button" parent="SideButtonArea/SelectionWindow/ButtonList" unique_id=447649205]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.51100004
+anchor_bottom = 0.51100004
+offset_top = -20.440002
+offset_right = 20.0
+offset_bottom = -0.44000244
+theme_override_styles/normal = SubResource("StyleBoxFlat_gky4r")
+
+[node name="Friend List" type="Button" parent="SideButtonArea/SelectionWindow/ButtonList" unique_id=310288010]
+material = SubResource("CanvasItemMaterial_62yky")
+layout_mode = 0
+offset_right = 20.0
+offset_bottom = 20.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_wxepc")
+
+[node name="Down" type="Button" parent="SideButtonArea" unique_id=205289364]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.551
+anchor_bottom = 0.551
+offset_left = 44.0
+offset_top = 334.96
+offset_right = 52.0
+offset_bottom = 342.96
