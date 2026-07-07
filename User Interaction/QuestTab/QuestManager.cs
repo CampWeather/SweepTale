@@ -112,7 +112,7 @@ public partial class QuestManager : Node
 		description: "Bersihkanlah Tumpukan-tumpukan sampah yang kamu temukan disekitar hutan.",
 		objectives: new List<ObjectiveDefinition>
 		{
-			new("clean_trash", "PileTrash", 5, "Clean 5 Pile of Trash")
+			new("clean_trash", "PileTrash", 5, "Bersihkan 5 Tumpukan Sampah")
 		}
 	);
 		
