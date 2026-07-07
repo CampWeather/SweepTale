@@ -1,11 +1,22 @@
 ~ start
-Nathan: [[Hi|Hello|Howdy]], this is some dialogue.
-Nathan: Here are some choices.
-- First one
-	Nathan: You picked the first one.
-- Second one
-	Nathan: You picked the second one.
-- Start again => start
-- End the conversation => END
-Nathan: For more information see the online documentation.
+Dzakwan: [[Hi|Hello|Howdy]], Wajah Mu baru disini.
+Dzakwan: Apa Kabar.
+- Baik, Ngomong-ngomong apa yang terjadi dengan Hutan ini?
+	Dzakwan: Huft...
+	Dzakwan: Apa ada yang aneh?
+	- Entahlah, aku tidak merasa hutan seharusnya dipenuhi dengan sampah seperti ini
+		Dzakwan: Kau benar, tidak seharusnya hutan terlihat seperti ini...
+		Dzakwan: Namun seperti yang kau lihat, itulah yang sedang terjadi pada hutan ini
+	- Hm? Tentu saja aneh, bagaimana bisa hutan menjadi seperti ini?
+		Dzakwan: Apa kamu serius tidak tau?
+		Dzakwan: ...
+		Dzakwan: Apa menurutmu Hewan bisa menghasilkan sampah-sampah seperti ini?
+- Sedikit sesak, Disini benar-benar kotor
+	Dzakwan: Kau akan terbiasa
+
+Dzakwan: Terimakasih sudah mengkhawatirkan hutan ini.
+Dzakwan: ...
+Dzakwan: Mungkin kamu bisa mencoba membantu hutan ini
+Dzakwan: Cobalah Bersihkan Sampah disekitar sini
+do complete_talk_and_start_clean_trash()
 => END

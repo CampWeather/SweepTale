@@ -1,11 +1,11 @@
 extends Control
 
+# Side bar UI variabel
+@export_group("Side Button Area")
 @export var animation_duration: float = 0.18
 @export var closed_offset_x: float = -260.0
 @export var selection_move_duration: float = 0.16
 
-# NEW: vertical spacing between buttons inside ButtonList. Tune this to
-# match your button height (+ a little gap if you want breathing room).
 @export var slot_height: float = 44.0
 
 # "press" feedback for the Up/Down nav buttons when triggered via input map
@@ -22,7 +22,56 @@ extends Control
 @export var selection_outline_width: int = 2
 @export var selection_outline_padding: float = 4.0
 
+# Variabel Export Quest 
+@export_group("Quest UI")
+
+@export var empty_quest_message: String = "Belum ada quest yang dapat dikerjakan."
+@export var quest_manager_missing_message: String = "QuestManager belum tersedia."
+@export var quest_manager_method_missing_message: String = "QuestManager tidak memiliki method GetActiveQuestViewData()."
+
+@export var quest_title_font_size: int = 16
+@export var quest_description_font_size: int = 12
+@export var objective_font_size: int = 12
+
+@export var quest_title_color: Color = Color(1.0, 0.9, 0.65, 1.0)
+@export var quest_description_color: Color = Color(0.85, 0.85, 0.85, 1.0)
+@export var objective_incomplete_color: Color = Color(1.0, 1.0, 1.0, 1.0)
+@export var objective_completed_color: Color = Color(0.55, 1.0, 0.55, 1.0)
+@export var empty_message_color: Color = Color(0.8, 0.8, 0.8, 1.0)
+
+@export var completed_objective_prefix: String = "✓"
+@export var incomplete_objective_prefix: String = "□"
+
+@export var quest_card_spacing: float = 12.0
+@export var objective_indent_x: float = 0.0
+
+# Export Debug Quest
+@export_group("Quest Debug")
+
+@export var enable_quest_debug: bool = false
+@export var auto_start_debug_quest: bool = false
+@export var debug_quest_id: String = "talk_to_Dzakwan"
+
+@export var debug_event_type: String = "talk_npc"
+@export var debug_event_target_id: String = "NPC_01"
+@export var debug_event_amount: int = 1
+
+@export_group("Quest UI Animation")
+
+@export var quest_card_enter_offset_x: float = -80.0
+@export var quest_card_exit_offset_x: float = -120.0
+@export var quest_card_enter_duration: float = 0.28
+@export var quest_card_exit_duration: float = 0.35
+@export var quest_card_complete_hold_duration: float = 0.75
+@export var quest_card_enter_stagger: float = 0.06
+
+@export var completed_quest_title_color: Color = Color(0.55, 1.0, 0.55, 1.0)
+@export var completed_quest_description_color: Color = Color(0.75, 1.0, 0.75, 1.0)
+
 @onready var panels_root: Control = $Panels
+@onready var quest_panel: Control = $"Panels/Quest Panel"
+@onready var quest_header_label: Label = $"Panels/Quest Panel/MarginContainer/VBoxContainer/HeaderLabel"
+@onready var quest_list: VBoxContainer = $"Panels/Quest Panel/MarginContainer/VBoxContainer/ScrollContainer/QuestList"
 
 @onready var side_button_area: Control = $SideButtonArea
 @onready var up_button: BaseButton = $SideButtonArea/Up
@@ -64,30 +113,89 @@ var _click_feedback_tweens: Dictionary = {}
 # into view before the delay finishes.
 var _button_visibility_tweens: Dictionary = {}
 
+var _quest_cards_by_id: Dictionary = {}
+var _quest_card_tweens: Dictionary = {}
+var _is_animating_quest_completion: bool = false
+
 
 func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	# NEW: force Clip Contents on in code, so buttons that have scrolled
-	# outside SelectionWindow's rect are never rendered, even if "Clip
-	# Contents" wasn't ticked on the node in the editor.
 	if selection_window != null:
 		selection_window.clip_contents = true
 
 	_setup_side_buttons()
 	_setup_panels()
+	_setup_quest_header()
 	_create_selection_outline()
 	_update_side_button_selection(false)
+	
+	_connect_quest_manager()
+	_refresh_quest_panel()
+	
+	if enable_quest_debug and auto_start_debug_quest:
+		debug_start_quest()
 
 	get_viewport().gui_release_focus()
-
-	# Window resize doesn't move ButtonList's children (they're pinned to a
-	# plain top-left anchor, see _setup_side_buttons), but SelectionWindow
-	# itself and the panels can still drift if THEY use screen-relative
-	# anchors — so re-sync the outline + panel meta whenever that happens.
+ # Auto Anchored
 	get_viewport().size_changed.connect(_on_viewport_resized)
 
+#Function yang menghubungkan QuestManager
+func _connect_quest_manager() -> void:
+	if not Engine.has_singleton("QuestManager") and not has_node("/root/QuestManager"):
+		push_warning("QuestTab: QuestManager Autoload tidak ditemukan.")
+		return
+
+	var manager = get_node_or_null("/root/QuestManager")
+	if manager == null:
+		push_warning("QuestTab: gagal mengambil /root/QuestManager.")
+		return
+
+	if manager.has_signal("QuestStarted"):
+		manager.connect("QuestStarted", _on_quest_started)
+
+	if manager.has_signal("QuestUpdated"):
+		manager.connect("QuestUpdated", _on_quest_updated)
+
+	if manager.has_signal("QuestCompleted"):
+		manager.connect("QuestCompleted", _on_quest_completed)
+
+	if manager.has_signal("QuestListChanged"):
+		manager.connect("QuestListChanged", _on_quest_list_changed)
+
+func _refresh_quest_panel(animate_enter: bool = false) -> void:
+	if quest_list == null:
+		return
+
+	if _is_animating_quest_completion:
+		return
+
+	_clear_quest_list()
+
+	var manager = get_node_or_null("/root/QuestManager")
+	if manager == null:
+		_add_empty_quest_message(quest_manager_missing_message)
+		return
+
+	if not manager.has_method("GetActiveQuestViewData"):
+		_add_empty_quest_message(quest_manager_method_missing_message)
+		return
+
+	var quests: Array = manager.GetActiveQuestViewData()
+
+	if quests.is_empty():
+		_add_empty_quest_message(empty_quest_message)
+		return
+
+	var index := 0
+	for quest_data in quests:
+		var card := _add_quest_card(quest_data)
+
+		if animate_enter:
+			_animate_quest_card_enter(card, index)
+
+		index += 1
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Side_Button_Up"):
@@ -102,6 +210,9 @@ func _input(event: InputEvent) -> void:
 		choose_side_button()
 		get_viewport().set_input_as_handled()
 
+	elif event.is_action_pressed("Debug_Quest_Progress"):
+		debug_report_quest_event()
+		get_viewport().set_input_as_handled()
 
 func _setup_side_buttons() -> void:
 	_side_buttons.clear()
@@ -134,8 +245,6 @@ func _setup_side_buttons() -> void:
 		button.focus_mode = Control.FOCUS_NONE
 		button.release_focus()
 
-		# NEW: pin to a plain top-left anchor so our manual index-based
-		# positioning below isn't fought by anchor recalculation later.
 		button.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		button.position = Vector2(0.0, i * slot_height)
 
@@ -152,8 +261,6 @@ func _setup_side_buttons() -> void:
 		down_button.pivot_offset = down_button.size / 2.0
 
 
-# NEW: generic click handler for any side button (replaces the old
-# hardcoded per-button .pressed callbacks for Quest / Friend List).
 func _on_side_button_pressed(index: int) -> void:
 	_selected_side_button_index = index
 	_update_side_button_selection(true)
@@ -181,6 +288,15 @@ func _setup_panels() -> void:
 		panel.modulate.a = 0.0
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
+func _setup_quest_header() -> void:
+	if quest_header_label == null:
+		return
+
+	quest_header_label.text = "Quest"
+	quest_header_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	quest_header_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	quest_header_label.add_theme_font_size_override("font_size", 20)
+	quest_header_label.modulate = Color.WHITE
 
 func _on_viewport_resized() -> void:
 	await get_tree().process_frame
@@ -188,10 +304,7 @@ func _on_viewport_resized() -> void:
 	_snap_outline_to_selection_window()
 	_refresh_panel_anchor_positions()
 
-
-# NEW: panels can drift the same way the old per-button outline math did,
-# if they're anchored to a screen edge. Re-derive open/closed meta from
-# wherever the panel actually is right now, post-resize.
+# Refresh Panel Anchor
 func _refresh_panel_anchor_positions() -> void:
 	for panel in _side_panels:
 		if panel == null:
@@ -291,10 +404,7 @@ func set_panel_open(panel: Control, open: bool) -> void:
 		if existing_tween != null and existing_tween.is_valid():
 			existing_tween.kill()
 
-	# NEW: if a DIFFERENT panel is still mid-close, wait for it to actually
-	# finish before this one starts opening. Without this, the incoming
-	# panel and the outgoing one are both visible, in the same spot, for
-	# the whole overlap window — which is the "saling menimpa" you saw.
+# Panel Tidak Saling Timpa
 	if open and _closing_panel_tween != null and _closing_panel_tween.is_valid():
 		await _closing_panel_tween.finished
 
@@ -361,11 +471,7 @@ func _create_selection_outline() -> void:
 	_snap_outline_to_selection_window()
 
 
-# NEW: the outline no longer chases a moving button — SelectionWindow is
-# the fixed frame, and the button list scrolls behind it instead. So the
-# outline just needs to match SelectionWindow's rect, once at startup and
-# again on resize. All the old arc/bezier "predict where the button will
-# land" math is gone, since nothing is moving that needs predicting anymore.
+# Auto Calculated Size when the window resize
 func _snap_outline_to_selection_window() -> void:
 	if _selection_outline == null or selection_window == null:
 		return
@@ -385,15 +491,8 @@ func _update_side_button_selection(animate: bool = true) -> void:
 	if _button_tween != null and _button_tween.is_valid():
 		_button_tween.kill()
 
-	# NEW: scroll the WHOLE list so the selected button lands at the top of
-	# ButtonList's local space (which lines up with SelectionWindow's clip
-	# rect) — this is what makes buttons slide up/down and get clipped out
-	# of view when they're not the selected one.
 	var target_list_y: float = -float(_selected_side_button_index) * slot_height
-
-	# NEW: how tall SelectionWindow's visible area actually is, so we know
-	# which buttons will land inside it once this scroll finishes. Falls
-	# back to a single slot if the window hasn't been laid out yet.
+  
 	var window_height: float = slot_height
 	if selection_window != null and selection_window.size.y > 0.0:
 		window_height = selection_window.size.y
@@ -417,8 +516,6 @@ func _update_side_button_selection(animate: bool = true) -> void:
 			var target_color := selected_button_color if i == _selected_side_button_index else unselected_button_color
 			_button_tween.tween_property(button, "modulate", target_color, selection_move_duration)
 
-			# NEW: a button is "in window" once it overlaps SelectionWindow's
-			# [0, window_height] range after this scroll finishes.
 			var final_top: float = button.position.y + target_list_y
 			var final_bottom: float = final_top + slot_height
 			var will_be_visible: bool = final_bottom > 0.0 and final_top < window_height
@@ -446,12 +543,6 @@ func _update_side_button_selection(animate: bool = true) -> void:
 			button.release_focus()
 
 
-# NEW: keeps a side button interactable + visible while it's inside (or
-# still sliding through) SelectionWindow, and fully disables it — visible
-# = false, no mouse input — once it has actually finished scrolling out.
-# The button itself was already clipped out by SelectionWindow's
-# Clip Contents before this fires, so there's no visual pop; this purely
-# stops an off-screen button from eating clicks/hovers meant for nothing.
 func _set_button_window_visibility(button: BaseButton, will_be_visible: bool) -> void:
 	if _button_visibility_tweens.has(button):
 		var existing: Tween = _button_visibility_tweens[button]
@@ -465,8 +556,7 @@ func _set_button_window_visibility(button: BaseButton, will_be_visible: bool) ->
 		return
 
 	# Stop it from intercepting input immediately, but don't hide it until
-	# the slide tween has actually had time to carry it out from under the
-	# clip rect.
+	# the slide tween has actually had time to carry it out from under the clip rect.
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var hide_tween := create_tween()
@@ -479,8 +569,7 @@ func _set_button_window_visibility(button: BaseButton, will_be_visible: bool) ->
 	)
 
 
-# Quick "press" bounce — squashes the button down, pops it slightly PAST
-# normal size, then settles back to 1.0.
+# Bounce Feel when click Side Button Area
 func _play_click_feedback(button: BaseButton) -> void:
 	if button == null:
 		return
@@ -515,3 +604,247 @@ func _play_click_feedback(button: BaseButton) -> void:
 		Vector2.ONE,
 		click_feedback_release_duration
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	
+
+# Signal From QuestManager.cs
+func _on_quest_started(_quest_id: String) -> void:
+	_refresh_quest_panel(true)
+
+
+func _on_quest_updated(_quest_id: String) -> void:
+	if not _is_animating_quest_completion:
+		_refresh_quest_panel(false)
+
+
+func _on_quest_completed(quest_id: String) -> void:
+	_play_quest_completed_animation(quest_id)
+
+
+func _on_quest_list_changed() -> void:
+	if not _is_animating_quest_completion:
+		_refresh_quest_panel(false)
+
+func _clear_quest_list() -> void:
+	for tween in _quest_card_tweens.values():
+		if tween != null and tween.is_valid():
+			tween.kill()
+
+	_quest_card_tweens.clear()
+	_quest_cards_by_id.clear()
+
+	for child in quest_list.get_children():
+		child.queue_free()
+
+#Untuk Membuat Quest Massage:
+func _add_empty_quest_message(message: String) -> void:
+	var label := Label.new()
+	label.text = message
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", quest_description_font_size)
+	label.modulate = empty_message_color
+	quest_list.add_child(label)
+
+# Membuat Quest Card Label berisi Tittle, description, objectives
+func _add_quest_card(quest_data: Dictionary) -> Control:
+	var quest_id: String = str(quest_data.get("id", ""))
+
+	var card := VBoxContainer.new()
+	card.name = "QuestCard_%s" % quest_id
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.modulate.a = 1.0
+	card.set_meta("quest_id", quest_id)
+
+	quest_list.add_child(card)
+
+	if not quest_id.is_empty():
+		_quest_cards_by_id[quest_id] = card
+
+	var title := Label.new()
+	title.name = "Title"
+	title.text = str(quest_data.get("title", "Untitled Quest"))
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title.add_theme_font_size_override("font_size", quest_title_font_size)
+	title.modulate = quest_title_color
+	card.add_child(title)
+
+	var description := Label.new()
+	description.name = "Description"
+	description.text = str(quest_data.get("description", ""))
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.add_theme_font_size_override("font_size", quest_description_font_size)
+	description.modulate = quest_description_color
+	card.add_child(description)
+
+	var objectives: Array = quest_data.get("objectives", [])
+
+	for objective_data in objectives:
+		_add_objective_row_to_card(card, objective_data)
+
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(0, quest_card_spacing)
+	card.add_child(spacer)
+
+	return card
+	
+
+# Membuat Baris status Objective Quest
+func _add_objective_row(objective_data: Dictionary) -> void:
+	var is_completed: bool = bool(objective_data.get("is_completed", false))
+	var description: String = str(objective_data.get("description", "Objective"))
+	var progress_text: String = str(objective_data.get("progress_text", ""))
+
+	var label := Label.new()
+	var checkbox := completed_objective_prefix if is_completed else incomplete_objective_prefix
+
+	if progress_text.is_empty():
+		label.text = "%s %s" % [checkbox, description]
+	else:
+		label.text = "%s %s  %s" % [checkbox, description, progress_text]
+
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", objective_font_size)
+
+	if objective_indent_x > 0.0:
+		label.position.x = objective_indent_x
+
+	if is_completed:
+		label.modulate = objective_completed_color
+	else:
+		label.modulate = objective_incomplete_color
+
+	quest_list.add_child(label)
+
+func debug_start_quest() -> void:
+	if not enable_quest_debug:
+		return
+	var manager = get_node_or_null("/root/QuestManager")
+	if manager != null and manager.has_method("StartQuest"):
+		manager.StartQuest(debug_quest_id)
+
+func debug_report_quest_event() -> void:
+	if not enable_quest_debug:
+		return
+	var manager = get_node_or_null("/root/QuestManager")
+	if manager != null and manager.has_method("ReportEvent"):
+		manager.ReportEvent(debug_event_type, debug_event_target_id, debug_event_amount)
+
+func _add_objective_row_to_card(card: Control, objective_data: Dictionary) -> Label:
+	var is_completed: bool = bool(objective_data.get("is_completed", false))
+	var description: String = str(objective_data.get("description", "Objective"))
+	var progress_text: String = str(objective_data.get("progress_text", ""))
+
+	var label := Label.new()
+	label.name = "Objective"
+	var checkbox := completed_objective_prefix if is_completed else incomplete_objective_prefix
+
+	if progress_text.is_empty():
+		label.text = "%s %s" % [checkbox, description]
+	else:
+		label.text = "%s %s  %s" % [checkbox, description, progress_text]
+
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", objective_font_size)
+
+	if objective_indent_x > 0.0:
+		label.position.x = objective_indent_x
+
+	label.modulate = objective_completed_color if is_completed else objective_incomplete_color
+
+	card.add_child(label)
+
+	return label
+	
+
+func _animate_quest_card_enter(card: Control, index: int = 0) -> void:
+	if card == null:
+		return
+
+	card.visible = true
+	card.modulate.a = 0.0
+	card.position.x = quest_card_enter_offset_x
+
+	var tween := create_tween()
+	_quest_card_tweens[card] = tween
+
+	tween.set_parallel(true)
+
+	if index > 0:
+		tween.tween_interval(quest_card_enter_stagger * float(index))
+
+	tween.tween_property(
+		card,
+		"position:x",
+		0.0,
+		quest_card_enter_duration
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+	tween.tween_property(
+		card,
+		"modulate:a",
+		1.0,
+		quest_card_enter_duration
+	)
+	
+func _play_quest_completed_animation(quest_id: String) -> void:
+	if quest_id.is_empty():
+		_refresh_quest_panel(true)
+		return
+
+	var card: Control = _quest_cards_by_id.get(quest_id, null)
+
+	if card == null or not is_instance_valid(card):
+		_refresh_quest_panel(true)
+		return
+
+	_is_animating_quest_completion = true
+
+	if _quest_card_tweens.has(card):
+		var existing: Tween = _quest_card_tweens[card]
+		if existing != null and existing.is_valid():
+			existing.kill()
+
+	_mark_quest_card_completed(card)
+
+	var tween := create_tween()
+	_quest_card_tweens[card] = tween
+
+	tween.tween_interval(quest_card_complete_hold_duration)
+
+	tween.set_parallel(true)
+
+	tween.tween_property(
+		card,
+		"position:x",
+		quest_card_exit_offset_x,
+		quest_card_exit_duration
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+
+	tween.tween_property(
+		card,
+		"modulate:a",
+		0.0,
+		quest_card_exit_duration
+	)
+
+	tween.finished.connect(func():
+		_is_animating_quest_completion = false
+		_refresh_quest_panel(true)
+	)
+
+func _mark_quest_card_completed(card: Control) -> void:
+	if card == null:
+		return
+
+	for child in card.get_children():
+		if child is Label:
+			if child.name == "Title":
+				child.modulate = completed_quest_title_color
+			elif child.name == "Description":
+				child.modulate = completed_quest_description_color
+			elif child.name == "Objective":
+				var label := child as Label
+				label.modulate = objective_completed_color
+
+				if label.text.begins_with(incomplete_objective_prefix):
+					label.text = completed_objective_prefix + label.text.substr(incomplete_objective_prefix.length())

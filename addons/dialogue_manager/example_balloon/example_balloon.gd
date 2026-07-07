@@ -215,5 +215,25 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 func _on_responses_menu_response_selected(response: DialogueResponse) -> void:
 	next(response.next_id)
 
+func complete_talk_and_start_clean_trash() -> void:
+	var manager = get_node_or_null("/root/QuestManager")
+	if manager == null:
+		push_warning("QuestManager not found at /root/QuestManager")
+		return
+
+	if manager.has_method("IsQuestActive") and manager.IsQuestActive("talk_to_Dzakwan"):
+		manager.ReportEvent("talk_npc", "NPC_01", 1)
+
+	if manager.has_method("IsQuestCompleted") and not manager.IsQuestCompleted("talk_to_Dzakwan"):
+		return
+
+	if manager.has_method("IsQuestActive") and manager.IsQuestActive("clean_trash_01"):
+		return
+
+	if manager.has_method("IsQuestCompleted") and manager.IsQuestCompleted("clean_trash_01"):
+		return
+
+	if manager.has_method("StartQuest"):
+		manager.StartQuest("clean_trash_01")
 
 #endregion

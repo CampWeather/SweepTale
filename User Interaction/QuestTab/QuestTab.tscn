@@ -37,6 +37,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gky4r")
 click_feedback_overshoot_scale = 1.2
+enable_quest_debug = true
+auto_start_debug_quest = true
+quest_card_exit_duration = 0.5
+quest_card_complete_hold_duration = 0.9
 
 [node name="Panels" type="Control" parent="." unique_id=1271115540]
 layout_mode = 1
@@ -46,6 +50,7 @@ anchor_bottom = 0.5
 offset_top = -324.0
 offset_right = 40.0
 offset_bottom = -284.0
+grow_vertical = 2
 
 [node name="Quest Panel" type="PanelContainer" parent="Panels" unique_id=1770774145]
 layout_mode = 1
@@ -63,14 +68,26 @@ layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panels/Quest Panel/MarginContainer" unique_id=1145496178]
 layout_mode = 2
+size_flags_horizontal = 3
+accessibility_region = true
 
-[node name="Label" type="Label" parent="Panels/Quest Panel/MarginContainer/VBoxContainer" unique_id=1678821885]
+[node name="HeaderLabel" type="Label" parent="Panels/Quest Panel/MarginContainer/VBoxContainer" unique_id=1678821885]
 layout_mode = 2
 text = "Quest"
 label_settings = SubResource("LabelSettings_4kxuq")
 horizontal_alignment = 1
 
+[node name="ScrollContainer" type="ScrollContainer" parent="Panels/Quest Panel/MarginContainer/VBoxContainer" unique_id=2015350245]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="QuestList" type="VBoxContainer" parent="Panels/Quest Panel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=265525794]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="Friend List Panel" type="PanelContainer" parent="Panels" unique_id=1751462396]
+visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -87,7 +104,7 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="Panels/Friend List Panel/MarginContainer" unique_id=2113317307]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panels/Friend List Panel/MarginContainer/VBoxContainer" unique_id=1063091908]
+[node name="HeaderLabel" type="Label" parent="Panels/Friend List Panel/MarginContainer/VBoxContainer" unique_id=1063091908]
 layout_mode = 2
 text = "Friend List"
 label_settings = SubResource("LabelSettings_mti6b")
