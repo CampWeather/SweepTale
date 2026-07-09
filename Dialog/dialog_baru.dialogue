@@ -1,6 +1,6 @@
 ~ start
-Dzakwan: [[Hi|Hello|Howdy]], Wajah Mu baru disini.
-Dzakwan: Apa Kabar.
+Dzakwan: [[Hi|Hello|Howdy]], Wajah Mu baru disini
+Dzakwan: Apa Kabar?
 - Baik, Ngomong-ngomong apa yang terjadi dengan Hutan ini?
 	Dzakwan: Huft...
 	Dzakwan: Apa ada yang aneh?
@@ -12,7 +12,13 @@ Dzakwan: Apa Kabar.
 		Dzakwan: ...
 		Dzakwan: Apa menurutmu Hewan bisa menghasilkan sampah-sampah seperti ini?
 - Sedikit sesak, Disini benar-benar kotor
-	Dzakwan: Kau akan terbiasa
+	Dzakwan: Hm...
+	Dzakwan: Apakah kau tidak merasa ada yang aneh?
+	- ...
+		Dzakwan: Tidak ada suara kicauan burung di Hutan ini
+		Dzakwan: Apa kau mendengarnya?
+		- Ya, Sedikit Sunyi Di sini ini
+			Dzakwan: Padahal ini Musim Semi
 
 Dzakwan: Terimakasih sudah mengkhawatirkan hutan ini.
 Dzakwan: ...
