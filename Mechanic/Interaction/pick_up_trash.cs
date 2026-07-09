@@ -11,6 +11,12 @@ public partial class pick_up_trash : RayCast3D
 	[Export] public bool RemovePileAfterPickup = true;
 	[Export] public float PilePickupHoldTime = 1.2f;
 
+	[Export] public string QuestId = "clean_trash_01";
+	[Export] public string QuestEventType = "clean_trash";
+	[Export] public string QuestTargetId = "PileTrash";
+	[Export] public int QuestEventAmount = 1;
+	[Export] public bool ReportPileTrashToQuest = true;
+
 	private Node3D heldObject = null;
 	private uint originalLayer;
 	private uint originalMask;
@@ -389,7 +395,8 @@ public partial class pick_up_trash : RayCast3D
 		}
 		
 		// Kirim data object ke fungsi progress
-		AddTrashProgress(obj); 
+		AddTrashProgress(obj);
+		ReportPileTrashQuestProgress(obj);
 		obj.QueueFree();
 	}
 
@@ -405,5 +412,35 @@ public partial class pick_up_trash : RayCast3D
 			heldObject.QueueFree();
 			heldObject = null;
 		}
+	}
+	
+	private void ReportPileTrashQuestProgress(Node3D obj)
+	{
+		if (!ReportPileTrashToQuest)
+		return;
+
+		if (obj == null)
+		return;
+
+		if (!obj.IsInGroup(PileGroup))
+		return;
+
+	QuestManager manager = GetNodeOrNull<QuestManager>("/root/QuestManager");
+
+		if (manager == null)
+		{
+			GD.PrintErr("QuestManager not found at /root/QuestManager");
+			return;
+		}
+
+		if (!manager.IsQuestActive(QuestId))
+		{
+			GD.Print($"Quest '{QuestId}' is not active yet.");
+			return;
+	}
+
+		manager.ReportEvent(QuestEventType, QuestTargetId, QuestEventAmount);
+
+		GD.Print($"Reported quest event: {QuestEventType}, {QuestTargetId}, {QuestEventAmount}");
 	}
 }

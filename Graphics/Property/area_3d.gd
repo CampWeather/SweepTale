@@ -4,9 +4,15 @@ extends Area3D
 @export var particle_node_name: String = "ExplosiveDebu"
 @export var trigger_once: bool = false
 
+@export var quest_id: String = "clean_trash_01"
+@export var quest_event_type: String = "clean_trash"
+@export var quest_target_group: String = "PileTrash"
+@export var amount: int = 1
+
 var explosive_debu: GPUParticles3D
 var has_triggered: bool = false
 
+var cleaned: bool = false
 
 func _ready() -> void:
 	monitoring = true
@@ -73,3 +79,26 @@ func _find_particle_by_name(root: Node, target_name: String) -> GPUParticles3D:
 			return found
 
 	return null
+
+func action() -> bool:
+	if cleaned:
+		return false
+	var manager = get_node_or_null("/root/QuestManager")
+	if manager == null:
+		push_warning("QuestManager not found at /root/QuestManager")
+		return false
+	if manager.has_method("IsQuestActive") and not manager.IsQuestActive(quest_id):
+		print("Clean Trash quest is not active yet.")
+		return false
+	var target := _get_quest_target_group()
+	if manager.has_method("ReportEvent"):
+		manager.ReportEvent(quest_event_type, target, amount)
+		print("Reported quest event: ", quest_event_type, " / ", target)
+	cleaned = true
+	queue_free()
+	return true
+
+func _get_quest_target_group() -> String:
+	if is_in_group("PileTrash"):
+		return "PileTrash"
+	return quest_target_group

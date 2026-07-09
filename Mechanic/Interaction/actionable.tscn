@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://nwqv1vcx0gel"]
 
-[ext_resource type="Script" uid="uid://d0i15vax5xblw" path="res://Mechanic/Interaction/actionable.gd" id="1_qhrvp"]
+[ext_resource type="Script" uid="uid://d0i15vax5xblw" path="res://Mechanic/Interaction/Koala.gd" id="1_qhrvp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dl2ca"]
 
