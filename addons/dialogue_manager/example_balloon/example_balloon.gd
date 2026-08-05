@@ -235,5 +235,5 @@ func complete_talk_and_start_clean_trash() -> void:
 
 	if manager.has_method("StartQuest"):
 		manager.StartQuest("clean_trash_01")
-
+		
 #endregion

@@ -1,13 +1,12 @@
 [gd_scene format=3 uid="uid://bpn0qqq2hohkr"]
 
 [ext_resource type="PackedScene" uid="uid://nwqv1vcx0gel" path="res://Mechanic/Interaction/actionable.tscn" id="1_r2mgj"]
-[ext_resource type="Resource" uid="uid://egoj1sj3yk1o" path="res://Dialog/dialog_baru.dialogue" id="2_85lxn"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_dl2ca"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dl2ca"]
 
-[node name="NPC_Dzakwan" type="StaticBody3D" unique_id=1383002684]
+[node name="NPC_Kola" type="StaticBody3D" unique_id=1383002684]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=294516454]
 mesh = SubResource("CapsuleMesh_dl2ca")
@@ -16,7 +15,6 @@ mesh = SubResource("CapsuleMesh_dl2ca")
 shape = SubResource("CapsuleShape3D_dl2ca")
 
 [node name="Actionable" parent="." unique_id=1509722209 node_paths=PackedStringArray("quest_marker", "bubble_dialog") instance=ExtResource("1_r2mgj")]
-dialogue_resource = ExtResource("2_85lxn")
 quest_marker = NodePath("../QuestMarker")
 bubble_dialog = NodePath("../BubbleDialog")
 

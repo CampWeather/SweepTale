@@ -6,6 +6,8 @@
 [ext_resource type="Shader" uid="uid://bfrrsl2ebegid" path="res://Mechanic/Player Movement/DustHitEffect.gdshader" id="4_h4mv5"]
 [ext_resource type="Script" uid="uid://ci1o8ujy6ywac" path="res://Mechanic/Player Movement/dust_hit_effect.gd" id="4_hwlxa"]
 [ext_resource type="PackedScene" uid="uid://cbbkba1ygp6sl" path="res://User Interaction/QuestTab/QuestTab.tscn" id="4_t4wkg"]
+[ext_resource type="PackedScene" uid="uid://chhsh34nguch1" path="res://User Interaction/Progress Bar/ProgressBar.tscn" id="5_in7q3"]
+[ext_resource type="PackedScene" uid="uid://dvxaaw50xg7n" path="res://User Interaction/Currency Bar/CloverUI.tscn" id="6_mjwmh"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nfyxn"]
 
@@ -52,6 +54,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -1.5)
 
 [node name="SideBar" parent="Player/Neck/Camera3D/UI" unique_id=1075468232 instance=ExtResource("4_t4wkg")]
 mouse_filter = 2
+
+[node name="Progress Bar" parent="Player/Neck/Camera3D/UI" unique_id=2145582346 instance=ExtResource("5_in7q3")]
+
+[node name="CloverRewardHUD" parent="Player/Neck/Camera3D/UI" unique_id=576843731 instance=ExtResource("6_mjwmh")]
 
 [node name="ActionableFinder" type="Area3D" parent="Player/Neck/Camera3D" unique_id=1077722868]
 collision_layer = 0

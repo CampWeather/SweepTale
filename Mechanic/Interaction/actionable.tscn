@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://nwqv1vcx0gel"]
 
-[ext_resource type="Script" uid="uid://d0i15vax5xblw" path="res://Mechanic/Interaction/Koala.gd" id="1_qhrvp"]
+[ext_resource type="Script" uid="uid://d0i15vax5xblw" path="res://Graphics/Property/NPC/Kola the Koala/Koala.gd" id="1_qhrvp"]
+[ext_resource type="Resource" uid="uid://egoj1sj3yk1o" path="res://Dialog/dialog_baru.dialogue" id="2_v2lat"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_dl2ca"]
 
@@ -8,6 +9,7 @@
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("1_qhrvp")
+dialogue_resource = ExtResource("2_v2lat")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2056199435]
 shape = SubResource("SphereShape3D_dl2ca")

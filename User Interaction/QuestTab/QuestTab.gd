@@ -831,7 +831,7 @@ func _play_quest_completed_animation(quest_id: String) -> void:
 		_is_animating_quest_completion = false
 		_refresh_quest_panel(true)
 	)
-
+ 
 func _mark_quest_card_completed(card: Control) -> void:
 	if card == null:
 		return
