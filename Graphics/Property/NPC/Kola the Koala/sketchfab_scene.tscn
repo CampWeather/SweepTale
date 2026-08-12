@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cu63f2fs4j78"]
+
+[ext_resource type="PackedScene" uid="uid://dbt6tkwv40vm6" path="res://Graphics/Property/NPC/Kola the Koala/stylized-koala-in-a-red-sweater.glb" id="1_wfone"]
+
+[node name="Sketchfab_Scene" unique_id=1646261435 instance=ExtResource("1_wfone")]
+
+[node name="Sketchfab_model" parent="." index="0" unique_id=1233735041]
+transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 0, 0, 0)

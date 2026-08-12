@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ckvgyvclnwggo" path="res://addons/dialogue_manager/dialogue_label.tscn" id="2_a8ve6"]
 [ext_resource type="Script" uid="uid://d1wt4ma6055l8" path="res://addons/dialogue_manager/example_balloon/example_balloon.gd" id="2_mwe50"]
-[ext_resource type="Texture2D" uid="uid://bipxv1hli7nk8" path="res://Graphics/Property/icon/Kola.png" id="2_ohdik"]
+[ext_resource type="Texture2D" uid="uid://pmp5e6auhc0w" path="res://Graphics/Property/icon/Kola in Game (1).png" id="2_ohdik"]
 [ext_resource type="Script" uid="uid://bb52rsfwhkxbn" path="res://addons/dialogue_manager/dialogue_responses_menu.gd" id="3_72ixx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3v36"]
@@ -55,10 +55,10 @@ anchors_preset = 0
 
 [node name="Potrait" type="TextureRect" parent="Balloon" unique_id=440582862]
 layout_mode = 0
-offset_left = -4.0
-offset_top = 200.0
-offset_right = 277.0
-offset_bottom = 538.0
+offset_left = -36.0
+offset_top = 239.0
+offset_right = 267.0
+offset_bottom = 542.0
 texture = ExtResource("2_ohdik")
 expand_mode = 1
 

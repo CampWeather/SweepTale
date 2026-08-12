@@ -60,4 +60,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.923615, -0.051909804, 19.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.815536, -0.05190885, 15.509914)
 
 [node name="NPC_Dzakwan" parent="." unique_id=1383002684 instance=ExtResource("5_k3v36")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.599271, 1.2500005, -10.05956)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9232123, 0.648425, -10.06453)
