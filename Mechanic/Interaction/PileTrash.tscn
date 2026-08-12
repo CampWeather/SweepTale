@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://bdtrirl4cajdi"]
 
-[ext_resource type="Script" uid="uid://do3vxygsks1xj" path="res://Graphics/Property/area_3d.gd" id="1_3qo8b"]
+[ext_resource type="Script" uid="uid://do3vxygsks1xj" path="res://Mechanic/Interaction/PileTrash.gd" id="1_3qo8b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3qo8b"]
 albedo_color = Color(0.09546132, 0.10473391, 0.11771371, 1)

@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bk485wxfqm2ud" path="res://Graphics/Environment/Green_Forrest.tscn" id="1_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://voxod5rd5kf5" path="res://Mechanic/Player Movement/player_movement.tscn" id="2_qvhan"]
 [ext_resource type="PackedScene" uid="uid://ctdffkuigs1i4" path="res://Mechanic/Interaction/test_interaction.tscn" id="3_qvhan"]
-[ext_resource type="PackedScene" uid="uid://bdtrirl4cajdi" path="res://Graphics/Property/PileTrash.tscn" id="4_eunhr"]
+[ext_resource type="PackedScene" uid="uid://bdtrirl4cajdi" path="res://Mechanic/Interaction/PileTrash.tscn" id="4_eunhr"]
 [ext_resource type="PackedScene" uid="uid://bpn0qqq2hohkr" path="res://Graphics/Property/NPC/Kola the Koala/npc_Kola.tscn" id="5_k3v36"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_qvhan"]
