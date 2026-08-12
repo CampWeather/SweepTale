@@ -65,6 +65,7 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panels/Quest Panel" unique_id=1323994405]
 layout_mode = 2
+theme_override_constants/margin_left = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panels/Quest Panel/MarginContainer" unique_id=1145496178]
 layout_mode = 2
@@ -101,14 +102,23 @@ grow_vertical = 2
 [node name="MarginContainer" type="MarginContainer" parent="Panels/Friend List Panel" unique_id=1957759431]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panels/Friend List Panel/MarginContainer" unique_id=2113317307]
+[node name="@VBoxContainer@133435" type="VBoxContainer" parent="Panels/Friend List Panel/MarginContainer" unique_id=2113317307]
 layout_mode = 2
 
-[node name="HeaderLabel" type="Label" parent="Panels/Friend List Panel/MarginContainer/VBoxContainer" unique_id=1063091908]
+[node name="HeaderLabel" type="Label" parent="Panels/Friend List Panel/MarginContainer/@VBoxContainer@133435" unique_id=1063091908]
 layout_mode = 2
 text = "Friend List"
 label_settings = SubResource("LabelSettings_mti6b")
 horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panels/Friend List Panel/MarginContainer/@VBoxContainer@133435" unique_id=151988175]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FriendList" type="VBoxContainer" parent="Panels/Friend List Panel/MarginContainer/@VBoxContainer@133435/ScrollContainer" unique_id=1804556359]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="SideButtonArea" type="Control" parent="." unique_id=239315563]
 layout_mode = 1

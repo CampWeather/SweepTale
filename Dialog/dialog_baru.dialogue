@@ -1,28 +1,61 @@
 ~ start
-Dzakwan: [[Hi|Hello|Howdy]], Wajah Mu baru disini
-Dzakwan: Apa Kabar?
+Kola: [[Hi|Hello|Howdy]], Wajah Mu baru disini
+Kola: Apa Kabar?
 - Baik, Ngomong-ngomong apa yang terjadi dengan Hutan ini?
-	Dzakwan: Huft...
-	Dzakwan: Apa ada yang aneh?
+	Kola: Huft...
+	Kola: Apa ada yang aneh?
 	- Entahlah, aku tidak merasa hutan seharusnya dipenuhi dengan sampah seperti ini
-		Dzakwan: Kau benar, tidak seharusnya hutan terlihat seperti ini...
-		Dzakwan: Namun seperti yang kau lihat, itulah yang sedang terjadi pada hutan ini
+		Kola: Kau benar, tidak seharusnya hutan terlihat seperti ini...
+		Kola: Namun seperti yang kau lihat, itulah yang sedang terjadi pada hutan ini
 	- Hm? Tentu saja aneh, bagaimana bisa hutan menjadi seperti ini?
-		Dzakwan: Apa kamu serius tidak tau?
-		Dzakwan: ...
-		Dzakwan: Apa menurutmu Hewan bisa menghasilkan sampah-sampah seperti ini?
+		Kola: Apa kamu serius tidak tau?
+		Kola: ...
+		Kola: Apa menurutmu Hewan bisa menghasilkan sampah-sampah seperti ini?
 - Sedikit sesak, Disini benar-benar kotor
-	Dzakwan: Hm...
-	Dzakwan: Apakah kau tidak merasa ada yang aneh?
+	Kola: Hm...
+	Kola: Apakah kau tidak merasa ada yang aneh?
 	- ...
-		Dzakwan: Tidak ada suara kicauan burung di Hutan ini
-		Dzakwan: Apa kau mendengarnya?
+		Kola: Tidak ada suara kicauan burung di Hutan ini
+		Kola: Apa kau mendengarnya?
 		- Ya, Sedikit Sunyi Di sini ini
-			Dzakwan: Padahal ini Musim Semi
+			Kola: Padahal ini Musim Semi lho
 
-Dzakwan: Terimakasih sudah mengkhawatirkan hutan ini.
-Dzakwan: ...
-Dzakwan: Mungkin kamu bisa mencoba membantu hutan ini
-Dzakwan: Cobalah Bersihkan Sampah disekitar sini
+Kola: Terimakasih sudah mengkhawatirkan hutan ini.
+Kola: ...
+Kola: Mungkin kamu bisa mencoba membantu hutan ini
+Kola: Cobalah Bersihkan Sampah disekitar sini
 do complete_talk_and_start_clean_trash()
+=> END
+
+~ clean_trash_turn_in
+Kola: Apakah kamu sudah mencoba membersihkan sampah-sampah tersebut?
+- Ya, Hutan ini benar-benar kotor
+	Kola: Benar itulah mengapa kau tidak mendengar suara kicauan burung di hutan ini
+	Kola: Sepertinya kamu juga mendapatkan debu dari kotoran disekitar sini
+	Kola: Hahaha
+- Ya, Aku juga mengumpulkan beberapa sampah disini
+	Kola: Apa ?!
+	Kola: Kamu memungut sampah untuk apa?
+	- Untuk-
+		Kola: Tunggu Biar aku tebak...
+		Kola: Untuk Kau Gunakan di kepalamu?
+		- Hah??
+			Kola: Hahaha Ayolah aku tahu itu
+			Kola: Robin juga sering mengumpulkan sampah untuk di kenakan
+
+Kola: Bagaimanapun, Hutan ini terasa sedikit lebih bersih sekarang.
+Kola: Terima kasih sudah membantu. Ini hadiah kecil untukmu
+do turn_in_follow_up_quest()
+=> END
+
+~ clean_trash_active
+Kola: Sampah-sampah itu masih mengganggu hutan.
+Kola: Tolong bersihkan semuanya dulu, ya.
+Kola: Setelah selesai, kembali temui aku.
+=> END
+
+~ after_clean_trash
+Kola: Hutan ini terasa lebih baik sekarang.
+Kola: Terima kasih sudah membantu membersihkan sampah-sampah itu.
+
 => END
