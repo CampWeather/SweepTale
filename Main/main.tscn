@@ -5,10 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://ctdffkuigs1i4" path="res://Mechanic/Interaction/test_interaction.tscn" id="3_qvhan"]
 [ext_resource type="PackedScene" uid="uid://bdtrirl4cajdi" path="res://Mechanic/Interaction/PileTrash.tscn" id="4_eunhr"]
 [ext_resource type="PackedScene" uid="uid://bpn0qqq2hohkr" path="res://Graphics/Property/NPC/Kola the Koala/npc_Kola.tscn" id="5_k3v36"]
+[ext_resource type="PackedScene" uid="uid://v6fdd5xs2uh6" path="res://Graphics/Environment/smog_area.tscn" id="6_liyct"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_qvhan"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_eunhr"]
+
+[sub_resource type="Environment" id="Environment_qrl2l"]
+volumetric_fog_enabled = true
 
 [node name="Node3D" type="Node3D" unique_id=1692333861]
 
@@ -16,7 +20,7 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7828156, 0, -1.3380299)
 
 [node name="Player Movement" parent="." unique_id=837243389 groups=["player"] instance=ExtResource("2_qvhan")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77899265, 0.25000048, 7.359867)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75994205, -0.05147028, 1.0233502)
 
 [node name="TestInteraction" parent="Player Movement" unique_id=195860454 instance=ExtResource("3_qvhan")]
 
@@ -61,3 +65,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.815536, -0.05190885, 15.50
 
 [node name="NPC_Dzakwan" parent="." unique_id=1383002684 instance=ExtResource("5_k3v36")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9232123, 0.648425, -10.06453)
+
+[node name="SmogArea" parent="." unique_id=1205155377 instance=ExtResource("6_liyct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -1.33)
+max_depth_distance = 35.18
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1178431860]
+environment = SubResource("Environment_qrl2l")

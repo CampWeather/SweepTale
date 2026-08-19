@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://v6fdd5xs2uh6"]
+
+[ext_resource type="Script" uid="uid://d22lcg0dsh7e8" path="res://Graphics/Environment/SmogArea.gd" id="1_idgss"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qrl2l"]
+size = Vector3(50, 10, 50)
+
+[node name="SmogArea" type="Area3D" unique_id=1205155377]
+script = ExtResource("1_idgss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=928192535]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0056381226, 0.56884766, 0.001739502)
+shape = SubResource("BoxShape3D_qrl2l")

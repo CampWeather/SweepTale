@@ -30,6 +30,7 @@ var pitch: float = 0.0
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	add_to_group("player")
 	
 	DialogueManager.dialogue_ended.connect(_on_dialogue_ended)
 
