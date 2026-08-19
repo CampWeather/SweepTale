@@ -22,13 +22,18 @@ extends Area3D
 @export var turn_in_quest_id: String = "clean_trash_01"
 @export_group("Dialog Camera Position")
 @export var dialog_camera_point: Node3D
+@export var player_stand_point: Node3D #
 
 var has_interacted: bool = false
 
 const BalloonScene = preload("res://Dialog/Balloon.tscn")
 
+
 func get_dialog_camera_point() -> Node3D:
 	return dialog_camera_point
+	
+func get_player_stand_point() -> Node3D:
+	return player_stand_point
 	
 func action() -> bool:
 	if dialogue_resource == null:

@@ -495,14 +495,18 @@ mesh = SubResource("ArrayMesh_y1rx5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3312199, 0)
 shape = SubResource("CapsuleShape3D_dl2ca")
 
-[node name="Actionable" parent="." unique_id=1509722209 node_paths=PackedStringArray("quest_marker", "bubble_dialog", "dialog_camera_point") instance=ExtResource("1_r2mgj")]
+[node name="Actionable" parent="." unique_id=1509722209 node_paths=PackedStringArray("quest_marker", "bubble_dialog", "dialog_camera_point", "player_stand_point") instance=ExtResource("1_r2mgj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71495426, 0)
 quest_marker = NodePath("../QuestMarker")
 bubble_dialog = NodePath("../BubbleDialog")
 dialog_camera_point = NodePath("../DialogCameraPoint")
+player_stand_point = NodePath("PlayerStandPoint")
 
 [node name="CollisionShape3D" parent="Actionable" index="0" unique_id=2056199435]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0.10005152, -0.44214714)
+
+[node name="PlayerStandPoint" type="Marker3D" parent="Actionable" unique_id=1309583230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.79778033, -1.5174786)
 
 [node name="QuestMarker" type="Label3D" parent="." unique_id=435711331]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2872188, 0)
@@ -517,6 +521,6 @@ billboard = 1
 text = "Haloo"
 
 [node name="DialogCameraPoint" type="Marker3D" parent="." unique_id=701414415]
-transform = Transform3D(-0.10723252, 0, 0.99423397, 0, 1, 0, -0.99423397, 0, -0.10723252, 2.5531452, 0.5199735, -0.94103134)
+transform = Transform3D(-0.99979615, 0, -0.020186832, 0, 1, 0, 0.020186832, 0, -0.99979615, -0.03289646, -0.20142278, -1.4886347)
 
 [editable path="Actionable"]

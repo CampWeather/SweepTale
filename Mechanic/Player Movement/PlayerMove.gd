@@ -21,6 +21,8 @@ extends CharacterBody3D
 @onready var neck: Node3D = get_node(neck_path)
 @onready var camera: Camera3D = get_node(camera_path)
 @onready var dust_hit_effect = $Neck/DustHitEffect
+@onready var player_mesh = $MeshInstance3D
+
 
 var is_in_dialogue: bool = false
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -106,26 +108,51 @@ func play_dust_hit_effect() -> void:
 	if dust_hit_effect and dust_hit_effect.has_method("play_dust_hit_effect"):
 		dust_hit_effect.play_dust_hit_effect()
 
-# --- MODIFIKASI: Ditambah parameter state dan animasi kamera ---
+# --- MODIFIKASI: Teleport, Hadap Otomatis, dan Rotasi Terpendek ---
 func set_dialogue_state(state: bool, target: Node3D = null) -> void:
 	is_in_dialogue = state
 	if is_in_dialogue:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		if player_mesh:
+			player_mesh.hide() # Sembunyikan badan 100%
 		
-		# Animasi kunci kamera ke posisi NPC
-		if target and target.has_method("get_dialog_camera_point"):
-			var cam_point = target.get_dialog_camera_point()
-			if cam_point != null:
-				if camera_tween and camera_tween.is_valid():
-					camera_tween.kill()
-				camera_tween = create_tween()
-				camera_tween.set_parallel(true)
-				camera_tween.set_ease(Tween.EASE_IN_OUT)
-				camera_tween.set_trans(Tween.TRANS_SINE)
-				camera_tween.tween_property(camera, "global_position", cam_point.global_position, 0.6)
-				camera_tween.tween_property(camera, "global_rotation", cam_point.global_rotation, 0.6)
+		if target:
+			# 1. Teleport ke marker berdiri
+			if target.has_method("get_player_stand_point"):
+				var stand_point = target.get_player_stand_point()
+				if stand_point != null:
+					global_position = stand_point.global_position
+			
+			# 2. Paksa karakter menatap wajah NPC (Abaikan rotasi marker yang salah)
+			look_at(target.global_position, Vector3.UP)
+			rotation.x = 0.0 # Kunci agar badan tidak mendongak/menunduk
+			rotation.z = 0.0 # Kunci agar badan tidak miring
+			
+			# Reset leher dan kamera ke tengah sebelum animasi dimulai
+			pitch = 0.0
+			neck.rotation.x = 0.0
+			camera.transform = default_camera_transform
+			
+			# 3. Animasi Kamera (Mencegah kamera melintir aneh)
+			if target.has_method("get_dialog_camera_point"):
+				var cam_point = target.get_dialog_camera_point()
+				if cam_point != null:
+					if camera_tween and camera_tween.is_valid():
+						camera_tween.kill()
+					camera_tween = create_tween()
+					camera_tween.set_parallel(true)
+					camera_tween.set_ease(Tween.EASE_IN_OUT)
+					camera_tween.set_trans(Tween.TRANS_SINE)
+					
+					# KALKULASI PENTING: Mengubah koordinat global NPC menjadi lokal terhadap leher pemain
+					var target_transform = neck.global_transform.affine_inverse() * cam_point.global_transform
+					
+					camera_tween.tween_property(camera, "position", target_transform.origin, 0.6)
+					camera_tween.tween_property(camera, "quaternion", target_transform.basis.get_rotation_quaternion(), 0.6)
 	else:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		if player_mesh:
+			player_mesh.show() # Munculkan kembali badan
 		
 		# Animasi kembalikan kamera ke tubuh Player
 		if camera_tween and camera_tween.is_valid():
@@ -134,5 +161,6 @@ func set_dialogue_state(state: bool, target: Node3D = null) -> void:
 		camera_tween.set_parallel(true)
 		camera_tween.set_ease(Tween.EASE_IN_OUT)
 		camera_tween.set_trans(Tween.TRANS_SINE)
+		
 		camera_tween.tween_property(camera, "position", default_camera_transform.origin, 0.6)
-		camera_tween.tween_property(camera, "rotation", default_camera_transform.basis.get_euler(), 0.6)
+		camera_tween.tween_property(camera, "quaternion", default_camera_transform.basis.get_rotation_quaternion(), 0.6)
