@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cbbkba1ygp6sl" path="res://User Interaction/QuestTab/QuestTab.tscn" id="4_t4wkg"]
 [ext_resource type="PackedScene" uid="uid://chhsh34nguch1" path="res://User Interaction/Progress Bar/ProgressBar.tscn" id="5_in7q3"]
 [ext_resource type="PackedScene" uid="uid://dvxaaw50xg7n" path="res://User Interaction/Currency Bar/CloverUI.tscn" id="6_mjwmh"]
+[ext_resource type="Shader" uid="uid://day1oyl08lu8j" path="res://Graphics/Environment/smog.gdshader" id="9_1dksu"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nfyxn"]
 
@@ -20,6 +21,12 @@ shader = ExtResource("4_h4mv5")
 shader_parameter/blur_strength = 0.0
 shader_parameter/gray_strength = 0.0
 shader_parameter/dust_tint_strength = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrl2l"]
+shader = ExtResource("9_1dksu")
+shader_parameter/smog_density = 0.0
+shader_parameter/player_depth = 0.0
+shader_parameter/smog_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
 
 [node name="Player Movement" type="Node3D" unique_id=837243389]
 
@@ -70,7 +77,7 @@ shape = SubResource("SphereShape3D_dl2ca")
 [node name="DustHitEffect" type="CanvasLayer" parent="Player/Neck" unique_id=571704609]
 script = ExtResource("4_hwlxa")
 
-[node name="ColorRect" type="ColorRect" parent="Player/Neck/DustHitEffect" unique_id=396857961]
+[node name="ColorRect" type="ColorRect" parent="Player/Neck/DustHitEffect" unique_id=396857961 groups=["player"]]
 material = SubResource("ShaderMaterial_hwlxa")
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,6 +85,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="SmogRect" type="ColorRect" parent="Player/Neck/DustHitEffect" unique_id=2115549442]
+material = SubResource("ShaderMaterial_qrl2l")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="PickupUI" type="CanvasLayer" parent="Player/Neck" unique_id=1372210650]
 
